@@ -4,7 +4,7 @@ export const AI_READINESS = {
   langgraph: true,
   telemetry: "dual-write to analytics + future vector store",
   notes:
-    "Expose chat through /assistant using LangGraph service once policies are signed-off.",
+    "Wire LangGraph-backed chat via AiExtension once policies are signed-off.",
 };
 
 export function describeAIStack() {

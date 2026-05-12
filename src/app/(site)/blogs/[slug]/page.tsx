@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { MdxArticle } from "@/features/blog/mdx-content";
+import { MediumPostLayout } from "@/features/blog/medium-post-layout";
+import { isMediumArticleUrl } from "@/lib/external-content";
 
 export default async function BlogDetailPage(props: {
   params: Promise<{ slug: string }>;
@@ -13,6 +15,19 @@ export default async function BlogDetailPage(props: {
     notFound();
   }
 
+  const canonical = post.canonicalUrl?.trim() ?? "";
+  if (canonical && isMediumArticleUrl(canonical)) {
+    return (
+      <MediumPostLayout
+        title={post.title}
+        excerpt={post.excerpt}
+        publishedAt={post.publishedAt}
+        canonicalUrl={canonical}
+        content={post.content}
+      />
+    );
+  }
+
   return (
     <article className="space-y-8">
       <header>
@@ -21,6 +36,19 @@ export default async function BlogDetailPage(props: {
         </p>
         <h1 className="mt-4 text-4xl font-semibold">{post.title}</h1>
         <p className="mt-4 text-lg text-slate-300">{post.excerpt}</p>
+        {canonical ? (
+          <p className="mt-4 text-sm text-slate-500">
+            Originally published:{" "}
+            <a
+              href={canonical}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sky-400 hover:underline"
+            >
+              {canonical}
+            </a>
+          </p>
+        ) : null}
       </header>
       <MdxArticle source={post.content} />
     </article>

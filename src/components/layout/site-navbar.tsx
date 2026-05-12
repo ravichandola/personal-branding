@@ -2,11 +2,10 @@
 
 import * as React from "react";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -24,19 +23,7 @@ export const navLinks = [
   { label: "Blogs", href: "/blogs" },
   { label: "Contact", href: "/contact" },
   { label: "Resume", href: "/resume" },
-  { label: "Research", href: "/research" },
-  { label: "Architecture", href: "/architecture" },
-  { label: "Playground", href: "/playground" },
-  { label: "AI Assistant", href: "/assistant" },
 ] as const;
-
-/** Shown inline in the header — keeps one clean row on typical laptop widths. */
-const MORE_HREFS = new Set<string>([
-  "/research",
-  "/architecture",
-  "/playground",
-  "/assistant",
-]);
 
 function isActive(pathname: string, href: string) {
   return pathname === href || (href !== "/" && pathname.startsWith(href));
@@ -46,29 +33,24 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
 
-  const primaryLinks = navLinks.filter(
-    (link) => link.href !== "/" && !MORE_HREFS.has(link.href),
-  );
-  const moreLinks = navLinks.filter((link) => MORE_HREFS.has(link.href));
-  const moreHasActive = moreLinks.some((link) => isActive(pathname, link.href));
+  const primaryLinks = navLinks.filter((link) => link.href !== "/");
 
   React.useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <header className="sticky top-0 z-[80] border-b border-zinc-200/80 bg-[#fafaf9]/95 backdrop-blur-md dark:border-zinc-800 dark:bg-[#0c0d10]/95">
-      {/* Three-column grid: brand | nav (min-w-0) | actions — stops flex overlap */}
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-5 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-items-stretch lg:gap-x-4 lg:gap-y-0 lg:px-6 lg:py-3.5 xl:gap-x-6">
+    <header className="sticky top-0 z-[80] border-b border-zinc-200/85 bg-[#fafaf9]/92 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 dark:border-zinc-800/90 dark:bg-zinc-950/96 dark:supports-[backdrop-filter]:backdrop-saturate-150">
+      <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3.5 sm:px-5 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-items-stretch lg:gap-x-5 lg:gap-y-0 lg:px-8 lg:py-4 xl:gap-x-8">
         <Link
           href="/"
-          className="relative z-10 flex w-max max-w-full flex-col gap-1 leading-tight"
+          className="relative z-10 flex w-max max-w-full flex-col gap-0.5 leading-tight"
         >
-          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400 sm:text-[11px] sm:tracking-[0.18em]">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500 sm:text-[11px] sm:tracking-[0.22em]">
             Staff engineer · Automation &amp; AI
           </span>
-          <span className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-base">
+          <span className="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-base lg:text-[17px]">
             <span className="block sm:inline">Ravi Chandola</span>
             {brandSubtitle ? (
-              <span className="mt-0.5 block text-xs font-normal text-zinc-500 sm:ml-1.5 sm:mt-0 sm:inline sm:text-base dark:text-zinc-400">
+              <span className="mt-0.5 block text-xs font-normal text-zinc-500 sm:ml-1.5 sm:mt-0 sm:inline sm:text-[15px] dark:text-zinc-400">
                 {brandSubtitle}
               </span>
             ) : null}
@@ -80,17 +62,25 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
           className="relative z-0 hidden min-w-0 justify-self-stretch lg:block"
         >
           <div className="flex w-full max-w-full justify-center overflow-x-auto overscroll-x-contain px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <ul className="inline-flex w-max max-w-full flex-none flex-nowrap items-center justify-center gap-0.5 sm:gap-1">
+            <ul className="inline-flex w-max max-w-full flex-none flex-nowrap items-center justify-center gap-0 sm:gap-0.5">
               {primaryLinks.map((link) => {
                 const active = isActive(pathname, link.href);
+                const isContact = link.href === "/contact";
                 return (
                   <li key={link.href} className="shrink-0">
                     <Link
                       href={link.href}
                       className={cn(
-                        "block whitespace-nowrap rounded-md px-2 py-1.5 text-[12px] font-medium text-zinc-600 transition-colors hover:text-zinc-900 sm:px-2.5 sm:text-[13px] dark:text-zinc-400 dark:hover:text-white",
-                        active &&
-                          "bg-zinc-200/90 text-zinc-900 dark:bg-zinc-800 dark:text-white",
+                        "relative block whitespace-nowrap rounded-lg px-2.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors sm:px-3",
+                        isContact
+                          ? active
+                            ? "border border-orange-600/45 bg-orange-600/12 text-orange-900 dark:border-orange-500/40 dark:bg-orange-500/12 dark:text-orange-50"
+                            : "border border-zinc-300/90 bg-zinc-200/55 text-zinc-800 hover:bg-zinc-200/90 dark:border-zinc-700 dark:bg-zinc-900/65 dark:text-zinc-200 dark:hover:bg-zinc-800/90"
+                          : cn(
+                              "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
+                              active &&
+                                "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
+                            ),
                       )}
                     >
                       {link.label}
@@ -98,65 +88,21 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                   </li>
                 );
               })}
-
-              <li className="shrink-0">
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
-                    <button
-                      type="button"
-                      className={cn(
-                        "inline-flex items-center gap-0.5 whitespace-nowrap rounded-md px-2 py-1.5 text-[12px] font-medium text-zinc-600 outline-none transition-colors hover:text-zinc-900 sm:px-2.5 sm:text-[13px] dark:text-zinc-400 dark:hover:text-white",
-                        moreHasActive &&
-                          "bg-zinc-200/90 text-zinc-900 dark:bg-zinc-800 dark:text-white",
-                      )}
-                    >
-                      More
-                      <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
-                    </button>
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Portal>
-                    <DropdownMenu.Content
-                      align="end"
-                      sideOffset={8}
-                      className="z-[100] min-w-[200px] rounded-lg border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
-                    >
-                      {moreLinks.map((link) => {
-                        const active = isActive(pathname, link.href);
-                        return (
-                          <DropdownMenu.Item key={link.href} asChild>
-                            <Link
-                              href={link.href}
-                              className={cn(
-                                "flex cursor-pointer rounded-md px-3 py-2 text-[13px] font-medium text-zinc-800 outline-none hover:bg-zinc-100 data-[highlighted]:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:data-[highlighted]:bg-zinc-800",
-                                active &&
-                                  "bg-orange-50 text-orange-900 dark:bg-orange-950/40 dark:text-orange-100",
-                              )}
-                            >
-                              {link.label}
-                            </Link>
-                          </DropdownMenu.Item>
-                        );
-                      })}
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Portal>
-                </DropdownMenu.Root>
-              </li>
             </ul>
           </div>
         </nav>
 
         <div className="flex items-center justify-end gap-1.5 sm:gap-2 lg:justify-self-end">
-          <div className="hidden items-center 2xl:flex">
-            <SocialIcons condensed />
+          <div className="hidden items-center lg:flex">
+            <SocialIcons surface="header" />
           </div>
-          <ThemeToggle />
+          <ThemeToggle compact />
 
           <Button
             asChild
             size="md"
             variant="primary"
-            className="hidden shrink-0 sm:inline-flex"
+            className="hidden shrink-0 shadow-md shadow-orange-900/20 sm:inline-flex dark:shadow-orange-950/50"
           >
             <Link href="/contact" prefetch className="gap-1.5">
               <span className="hidden lg:inline">Get in touch</span>
@@ -175,7 +121,7 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
             type="button"
             size="icon"
             variant="outline"
-            className="lg:hidden"
+            className="h-9 w-9 shrink-0 rounded-md border-zinc-300 bg-white lg:hidden dark:border-zinc-700 dark:bg-zinc-950"
             onClick={() => setOpen((previous) => !previous)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -192,10 +138,10 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="border-t border-zinc-200 dark:border-zinc-800 lg:hidden"
+            className="border-t border-zinc-200 bg-[#fafaf9]/98 dark:border-zinc-800 dark:bg-zinc-950/98 lg:hidden"
           >
-            <div className="mx-auto max-h-[min(70vh,520px)] max-w-6xl overflow-y-auto px-4 py-4 sm:px-5">
-              <p className="mb-3 text-[13px] text-zinc-500 dark:text-zinc-400">
+            <div className="mx-auto max-h-[min(70vh,520px)] max-w-7xl overflow-y-auto px-4 py-4 sm:px-5 lg:px-8">
+              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
                 Navigate
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -204,9 +150,9 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "rounded-lg border border-zinc-200 px-3 py-2.5 text-[13px] font-medium text-zinc-800 transition-colors hover:border-zinc-300 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-200 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/80",
+                      "rounded-lg border border-zinc-200/90 bg-white px-3 py-2.5 text-[13px] font-medium text-zinc-800 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-200 dark:hover:border-zinc-700 dark:hover:bg-zinc-900",
                       isActive(pathname, link.href) &&
-                        "border-orange-600/40 bg-orange-50 dark:border-orange-500/35 dark:bg-orange-950/30",
+                        "border-orange-600/45 bg-orange-50 dark:border-orange-500/35 dark:bg-orange-950/35",
                     )}
                   >
                     {link.label}
@@ -214,7 +160,7 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                 ))}
               </div>
               <Separator className="my-4 bg-zinc-200 dark:bg-zinc-800" />
-              <SocialIcons condensed={false} />
+              <SocialIcons align="center" surface="header" />
             </div>
           </motion.div>
         ) : null}

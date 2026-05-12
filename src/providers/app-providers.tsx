@@ -2,12 +2,12 @@
 
 import * as React from "react";
 
+import dynamic from "next/dynamic";
+
 import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
@@ -16,6 +16,20 @@ import { Toaster } from "sonner";
 import { SessionProviderWrapper } from "@/components/layout/session-provider";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+
+/** Own async chunk so `app/layout` stays smaller in dev (avoids ChunkLoad timeouts on slow compiles). */
+const ReactQueryDevtools =
+  process.env.NODE_ENV !== "production"
+    ? dynamic(
+        () =>
+          import("@tanstack/react-query-devtools").then((mod) => ({
+            default: mod.ReactQueryDevtools,
+          })),
+        { ssr: false },
+      )
+    : function DevtoolsStub() {
+        return null;
+      };
 
 type AppProvidersProps = {
   children: React.ReactNode;
@@ -47,7 +61,9 @@ export function AppProviders({ children }: AppProvidersProps) {
         >
           <TooltipProvider>{children}</TooltipProvider>
           <Toaster richColors position="bottom-right" />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {process.env.NODE_ENV !== "production" ? (
+            <ReactQueryDevtools initialIsOpen={false} />
+          ) : null}
         </NextThemesProvider>
       </QueryClientProvider>
     </SessionProviderWrapper>

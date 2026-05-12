@@ -26,7 +26,7 @@ async function main() {
     data: {
       ragEnabled: false,
       notes:
-        "Plug in OpenAI, LangGraph, LangChain, vector backends, webhook secrets before enabling /assistant routes.",
+        "Plug in OpenAI, LangGraph, LangChain, vector backends, and webhook secrets before enabling RAG features.",
     },
   });
 
@@ -658,6 +658,44 @@ async function main() {
 
   }
 
+
+
+  await prisma.homeSpotlight.deleteMany();
+
+  await prisma.homeSpotlight.createMany({
+    data: [
+      {
+        sortOrder: 0,
+        published: true,
+        title: "Playwright Fleet Control Plane",
+        summary:
+          "Tenant-aware estates, flaky auto-remediation loops, SLA-grade instrumentation.",
+        narrative:
+          "Multi-tenant Playwright estates need more than shared folders — they need identity per tenant, quota-aware runners, artifact retention policies, and dashboards that answer which estate is burning credits before leadership does. This control plane treats flaky tests as operational data: automatic quarantine, reruns with bounded blast radius, and remediation hooks that push failures back to owning teams with context. Instrumentation is SLA-grade: trace IDs from test start through artifact upload, budget alerts, and contract tests that fail the deploy if the fleet itself regresses.",
+        projectSlug: "playwright-fleet-fabric",
+      },
+      {
+        sortOrder: 1,
+        published: true,
+        title: "RAG Legal Companion",
+        summary:
+          "Chunking precedent libraries with OCR-aware guardrails plus eval harness.",
+        narrative:
+          "Legal research RAG dies in the gap between slick demos and messy PDFs — scanned exhibits, redacted clauses, and citation rules that change by jurisdiction. This companion pairs OCR-aware ingestion with chunking that respects document structure, then layers eval harnesses: golden Q&A sets, refusal boundaries around privileged content, and human-in-the-loop review queues when confidence drops. Guardrails are explicit: source attribution on every answer, blocked paths for sealed or non-public corpora, and regression suites that run nightly against precedent drift.",
+        projectSlug: "langgraph-citation-guard",
+      },
+      {
+        sortOrder: 2,
+        published: true,
+        title: "Performance Radar Suite",
+        summary:
+          "JMeter choreography, bottleneck overlays spanning prod-traffic hybrids.",
+        narrative:
+          "Performance testing only helps when it mimics reality without becoming impossible to maintain. This suite choreographs JMeter (and friends) against hybrid traffic models — replayed production shapes blended with synthetic edge cases — and renders bottleneck overlays that tie latency spikes to deploy windows, dependency versions, and fixture changes. The operator-facing goal is a single radar: reproducible scenarios, clear ownership, and a straight answer to whether a release slowed the system and where.",
+        projectSlug: null,
+      },
+    ],
+  });
 
 
   await prisma.user.deleteMany();

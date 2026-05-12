@@ -5,10 +5,11 @@ export default function ContactPage() {
   return (
     <div className="space-y-12">
       <PageIntro
-        eyebrow="Contact operations"
-        title="Tell me about the reliability program, AI initiative, or QA reset you are planning."
-        description="Submissions are persisted in Postgres, alerted through Resend/Nodemailer, and moderated with honeypot fields + per-address throttles."
+        eyebrow="Get in touch"
+        title="Let’s talk about the problem you are trying to solve."
+        description="Use the form for project inquiries, collaborations, or clear asks. I read everything that comes through and will reply by email. Social links stay in the site footer if you want to connect there too."
       />
+
       <ContactForm />
     </div>
   );

@@ -43,7 +43,7 @@ export function ContactForm() {
 
     if (result.ok) {
       setStatus(
-        "Message logged — telemetry captured, escalation path queued. Expect signal soon.",
+        "Thanks — your message is in. I will reply to the email you provided.",
       );
       form.reset();
     } else {
@@ -113,10 +113,12 @@ export function ContactForm() {
       </div>
 
       <Button disabled={form.formState.isSubmitting} type="submit" variant="glow">
-        {form.formState.isSubmitting ? "Transmitting…" : "Send secure briefing"}
+        {form.formState.isSubmitting ? "Sending…" : "Send message"}
       </Button>
 
-      {status ? <p className="text-sm text-emerald-200">{status}</p> : null}
+      {status ? (
+        <p className="text-sm text-emerald-700 dark:text-emerald-300">{status}</p>
+      ) : null}
     </form>
   );
 }

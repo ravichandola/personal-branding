@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardInner } from "@/components/ui/card";
 import {
+  ArrowUpRight,
   Cpu,
   Landmark,
   Newspaper,
@@ -18,6 +19,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
+export type SpotlightItem = {
+  title: string;
+  summary: string;
+  narrative: string;
+  projectSlug: string | null;
+};
+
 const STATIC_STATS = [
   { label: "Years Leading Automation", value: "7+" },
   { label: "Artifacts Shipped", value: "45+" },
@@ -26,43 +34,54 @@ const STATIC_STATS = [
   { label: "AI experiments", value: "18+" },
 ];
 
-const STATIC_PROJECTS = [
+/** Fallback when `HomeSpotlight` table is empty (matches seeded copy). */
+const STATIC_SPOTLIGHTS: SpotlightItem[] = [
   {
-    slug: "enterprise-playwright-fleet",
     title: "Playwright Fleet Control Plane",
-    excerpt:
+    summary:
       "Tenant-aware estates, flaky auto-remediation loops, SLA-grade instrumentation.",
+    narrative:
+      "Multi-tenant Playwright estates need more than shared folders — they need identity per tenant, quota-aware runners, artifact retention policies, and dashboards that answer which estate is burning credits before leadership does. This control plane treats flaky tests as operational data: automatic quarantine, reruns with bounded blast radius, and remediation hooks that push failures back to owning teams with context. Instrumentation is SLA-grade: trace IDs from test start through artifact upload, budget alerts, and contract tests that fail the deploy if the fleet itself regresses.",
+    projectSlug: "playwright-fleet-fabric",
   },
   {
-    slug: "rag-legal-companion",
     title: "RAG Legal Companion",
-    excerpt:
+    summary:
       "Chunking precedent libraries with OCR-aware guardrails plus eval harness.",
+    narrative:
+      "Legal research RAG dies in the gap between slick demos and messy PDFs — scanned exhibits, redacted clauses, and citation rules that change by jurisdiction. This companion pairs OCR-aware ingestion with chunking that respects document structure, then layers eval harnesses: golden Q&A sets, refusal boundaries around privileged content, and human-in-the-loop review queues when confidence drops. Guardrails are explicit: source attribution on every answer, blocked paths for sealed or non-public corpora, and regression suites that run nightly against precedent drift.",
+    projectSlug: "langgraph-citation-guard",
   },
   {
-    slug: "performance-radar-suite",
     title: "Performance Radar Suite",
-    excerpt:
+    summary:
       "JMeter choreography, bottleneck overlays spanning prod-traffic hybrids.",
+    narrative:
+      "Performance testing only helps when it mimics reality without becoming impossible to maintain. This suite choreographs JMeter (and friends) against hybrid traffic models — replayed production shapes blended with synthetic edge cases — and renders bottleneck overlays that tie latency spikes to deploy windows, dependency versions, and fixture changes. The operator-facing goal is a single radar: reproducible scenarios, clear ownership, and a straight answer to whether a release slowed the system and where.",
+    projectSlug: null,
   },
 ];
 
 export default async function MarketingHomePage() {
   let portrait: string | undefined;
+  let heroTitles: string[] | undefined;
   let stats = STATIC_STATS;
-  let spotlight = STATIC_PROJECTS;
+  let spotlight: SpotlightItem[] = STATIC_SPOTLIGHTS;
 
   try {
-    const [profile, projects] = await Promise.all([
+    const [profile, dbSpotlights] = await Promise.all([
       prisma.profile.findFirst({ orderBy: { updatedAt: "desc" } }),
-      prisma.project.findMany({
+      prisma.homeSpotlight.findMany({
         where: { published: true },
-        orderBy: { updatedAt: "desc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         take: 3,
       }),
     ]);
 
     portrait = profile?.avatarUrl ?? undefined;
+    if (profile?.rotatingTitles?.length) {
+      heroTitles = profile.rotatingTitles;
+    }
 
     if (profile) {
       stats = [
@@ -89,13 +108,12 @@ export default async function MarketingHomePage() {
       ];
     }
 
-    if (projects.length > 0) {
-      spotlight = projects.map((project) => ({
-        slug: project.slug,
-        title: project.title,
-        excerpt:
-          project.excerpt ??
-          `${project.description.slice(0, 160).trim()}${project.description.length > 160 ? "…" : ""}`,
+    if (dbSpotlights.length > 0) {
+      spotlight = dbSpotlights.map((s) => ({
+        title: s.title,
+        summary: s.summary,
+        narrative: s.narrative,
+        projectSlug: s.projectSlug,
       }));
     }
   } catch {
@@ -103,8 +121,8 @@ export default async function MarketingHomePage() {
   }
 
   return (
-    <div className="flex flex-col gap-20 pb-8 sm:gap-24">
-      <HomeHero portraitUrl={portrait} />
+    <div className="flex flex-col gap-16 pb-8 sm:gap-20 lg:gap-24">
+      <HomeHero portraitUrl={portrait} heroTitles={heroTitles} />
       <MetricStrip metrics={stats} />
       <Pillars />
       <ProjectSpotlight items={spotlight} />
@@ -126,14 +144,17 @@ function MetricStrip({
   metrics: Array<{ label: string; value: string }>;
 }) {
   return (
-    <Card>
-      <CardInner className="grid divide-y divide-zinc-200 dark:divide-zinc-800 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5">
+    <Card glow className="shadow-sm">
+      <CardInner className="grid divide-y divide-zinc-200/90 dark:divide-zinc-800 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5">
         {metrics.map((metric) => (
-          <div key={metric.label} className="space-y-3 px-6 py-6 sm:py-8">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+          <div
+            key={metric.label}
+            className="space-y-2.5 px-5 py-5 sm:px-6 sm:py-7"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500">
               {metric.label}
             </p>
-            <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+            <p className="text-3xl font-semibold tabular-nums tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
               {metric.value}
             </p>
           </div>
@@ -183,20 +204,20 @@ function Pillars() {
   ];
 
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex flex-col gap-9">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-2xl space-y-4">
           <Badge tone="muted">How I think about delivery</Badge>
-          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+          <h2 className="text-balance text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
             Serious automation craft for teams that cannot afford mystery in production.
           </h2>
-          <p className="text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="text-pretty text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
             From hyperscale OCR programs to QA leadership and independent labs — the
             through-line is operability: clear contracts, measurable quality, and
             systems that stay legible when scale shows up.
           </p>
         </div>
-        <Button asChild variant="primary">
+        <Button asChild variant="primary" className="shadow-md shadow-orange-900/15 dark:shadow-orange-950/40">
           <Link href="/about" prefetch>
             About
           </Link>
@@ -224,7 +245,7 @@ function PillarCard({
   icon: JSX.Element;
 }) {
   return (
-    <div className="group rounded-xl border border-zinc-200 bg-white/80 p-6 transition-colors hover:border-orange-600/35 dark:border-zinc-800 dark:bg-zinc-900/35 dark:hover:border-orange-500/40">
+    <div className="group rounded-2xl border border-zinc-200/90 bg-white/80 p-6 shadow-sm transition-[border-color,box-shadow] hover:border-orange-600/35 hover:shadow-md hover:shadow-zinc-900/[0.03] dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-orange-500/40 dark:hover:shadow-black/25">
       <Badge tone="muted">
         <span aria-hidden className="text-zinc-600 dark:text-zinc-400">
           {icon}
@@ -242,17 +263,16 @@ function PillarCard({
   );
 }
 
-function ProjectSpotlight({
-  items,
-}: {
-  items: Array<{ slug: string; title: string; excerpt: string }>;
-}) {
+function ProjectSpotlight({ items }: { items: SpotlightItem[] }) {
+  const cardClass =
+    "group flex h-full flex-col rounded-2xl border border-zinc-200/90 bg-white/75 shadow-sm outline-none transition-[border-color,box-shadow] hover:border-orange-600/45 hover:shadow-md hover:shadow-zinc-900/[0.04] focus-visible:ring-2 focus-visible:ring-orange-600/50 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-orange-500/45 dark:hover:shadow-black/25";
+
   return (
-    <section className="space-y-8">
+    <section className="space-y-9">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="space-y-4">
           <Badge tone="muted">Selected work</Badge>
-          <h2 className="max-w-2xl text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+          <h2 className="max-w-2xl text-balance text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
             Case studies shaped for auditors, infra, and on-call operators.
           </h2>
         </div>
@@ -265,26 +285,56 @@ function ProjectSpotlight({
       </div>
 
       <div className="grid gap-5 lg:grid-cols-3">
-        {items.map((item, idx) => (
-          <Link
-            key={item.slug}
-            href={`/projects/${item.slug}`}
-            prefetch
-            className="group block rounded-xl border border-zinc-200 bg-white/80 outline-none transition-colors hover:border-orange-600/40 focus-visible:ring-2 focus-visible:ring-orange-600/50 dark:border-zinc-800 dark:bg-zinc-900/35 dark:hover:border-orange-500/45"
-          >
-            <div className="h-full p-6 text-left sm:p-7">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400">
+        {items.map((item, idx) => {
+          const body = (
+            <>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-700 dark:text-orange-400">
                 Featured {idx + 1}
               </p>
-              <h3 className="mt-4 text-lg font-semibold text-zinc-900 group-hover:text-orange-800 dark:text-white dark:group-hover:text-orange-300 sm:text-xl">
+              <h3 className="mt-3 text-lg font-semibold text-zinc-900 group-hover:text-orange-800 dark:text-white dark:group-hover:text-orange-300 sm:text-xl">
                 {item.title}
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400">
-                {item.excerpt}
+              <p className="mt-3 text-[15px] font-medium leading-relaxed text-zinc-700 dark:text-zinc-300">
+                {item.summary}
               </p>
+              <p className="mt-4 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 line-clamp-5">
+                {item.narrative}
+              </p>
+              {item.projectSlug ? (
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-orange-700 dark:text-orange-400">
+                  Read case study
+                  <ArrowUpRight
+                    className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden
+                  />
+                </span>
+              ) : (
+                <span className="mt-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">
+                  Full write-up coming soon
+                </span>
+              )}
+            </>
+          );
+
+          if (item.projectSlug) {
+            return (
+              <Link
+                key={`${item.title}-${idx}`}
+                href={`/projects/${item.projectSlug}`}
+                prefetch
+                className={`${cardClass} block`}
+              >
+                <div className="flex h-full flex-col p-6 text-left sm:p-7">{body}</div>
+              </Link>
+            );
+          }
+
+          return (
+            <div key={`${item.title}-${idx}`} className={cardClass}>
+              <div className="flex h-full flex-col p-6 text-left sm:p-7">{body}</div>
             </div>
-          </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

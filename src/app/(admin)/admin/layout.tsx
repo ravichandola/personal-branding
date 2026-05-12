@@ -6,8 +6,11 @@ import { signOutAdminAction } from "@/features/admin/sign-out-action";
 
 const links = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/site", label: "Site & profile" },
+  { href: "/admin/skills", label: "Skills" },
   { href: "/admin/contacts", label: "Contacts" },
   { href: "/admin/blogs", label: "Blogs" },
+  { href: "/admin/spotlights", label: "Home spotlights" },
   { href: "/admin/projects", label: "Projects" },
 ];
 

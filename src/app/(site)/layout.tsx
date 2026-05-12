@@ -13,7 +13,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
 
       <AnalyticsBeacon />
 
-      <main className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col px-5 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8">
+      <main className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-16 pt-8 sm:px-5 sm:pb-20 sm:pt-10 lg:px-8">
         {children}
       </main>
 

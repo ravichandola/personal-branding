@@ -12,16 +12,23 @@ import { cn } from "@/lib/utils";
 type SocialIconsProps = {
   condensed?: boolean;
   align?: "left" | "center";
+  /** Compact tiles for sticky header (FM-style dark chrome). */
+  surface?: "default" | "header";
 };
-
-const tileClass =
-  "grid h-9 w-9 place-items-center rounded-lg border border-zinc-300 bg-white text-zinc-700 transition-colors hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80";
 
 export function SocialIcons({
   condensed: _condensed,
   align = "left",
+  surface = "default",
 }: SocialIconsProps) {
   void _condensed;
+
+  const tileClass =
+    surface === "header"
+      ? "grid h-8 w-8 place-items-center rounded-md border border-zinc-200/90 bg-white text-zinc-500 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700/80 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-white"
+      : "grid h-9 w-9 place-items-center rounded-lg border border-zinc-300 bg-white text-zinc-700 transition-colors hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80";
+
+  const iconSm = surface === "header" ? "h-[15px] w-[15px]" : "h-5 w-5";
 
   const tiles: Array<{
     aria: string;
@@ -33,7 +40,7 @@ export function SocialIcons({
       href: SITE.urls.githubRepos,
       content: (
         <>
-          <IconGitHub className="h-5 w-5" />
+          <IconGitHub className={iconSm} />
           <span className="sr-only">GitHub organization</span>
         </>
       ),
@@ -43,7 +50,7 @@ export function SocialIcons({
       href: SITE.urls.medium,
       content: (
         <>
-          <Newspaper className="h-5 w-5" aria-hidden />
+          <Newspaper className={iconSm} aria-hidden />
           <span className="sr-only">Medium</span>
         </>
       ),
@@ -53,7 +60,7 @@ export function SocialIcons({
       href: SITE.urls.linkedin,
       content: (
         <>
-          <IconLinkedIn aria-hidden />
+          <IconLinkedIn className={iconSm} aria-hidden />
           <span className="sr-only">LinkedIn</span>
         </>
       ),
@@ -63,7 +70,8 @@ export function SocialIcons({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-2",
+        "flex flex-wrap items-center gap-1.5",
+        surface === "header" ? "gap-1.5" : "gap-2",
         align === "center" && "justify-center",
       )}
     >
@@ -91,7 +99,7 @@ export function SocialIcons({
         rel="noopener noreferrer"
         className={tileClass}
       >
-        <Globe aria-hidden className="h-5 w-5" strokeWidth={1.6} />
+        <Globe aria-hidden className={iconSm} strokeWidth={1.6} />
         <span className="sr-only">Personal GitHub</span>
       </Link>
     </div>
@@ -116,11 +124,12 @@ function IconGitHub({ className }: { className?: string }) {
 }
 
 function IconLinkedIn({ ...props }: JSX.IntrinsicElements["svg"]) {
+  const { className: _c, ...rest } = props;
   return (
     <svg
-      {...props}
+      {...rest}
       aria-hidden
-      className="h-5 w-5"
+      className={cn("h-5 w-5", _c)}
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"
