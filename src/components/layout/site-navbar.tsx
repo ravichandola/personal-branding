@@ -44,10 +44,10 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
           href="/"
           className="relative z-10 flex w-max max-w-full flex-col gap-0.5 leading-tight"
         >
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500 sm:text-[11px] sm:tracking-[0.22em]">
-            Staff engineer · Automation &amp; AI
+          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400 sm:text-xs sm:tracking-[0.2em]">
+            Automation architecture · GenAI · Legal tech
           </span>
-          <span className="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-base lg:text-[17px]">
+          <span className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-lg lg:text-xl">
             <span className="block sm:inline">Ravi Chandola</span>
             {brandSubtitle ? (
               <span className="mt-0.5 block text-xs font-normal text-zinc-500 sm:ml-1.5 sm:mt-0 sm:inline sm:text-[15px] dark:text-zinc-400">
@@ -71,7 +71,7 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                     <Link
                       href={link.href}
                       className={cn(
-                        "relative block whitespace-nowrap rounded-lg px-2.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors sm:px-3",
+                        "relative block whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-3 sm:text-[15px]",
                         isContact
                           ? active
                             ? "border border-orange-600/45 bg-orange-600/12 text-orange-900 dark:border-orange-500/40 dark:bg-orange-500/12 dark:text-orange-50"
@@ -141,7 +141,7 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
             className="border-t border-zinc-200 bg-[#fafaf9]/98 dark:border-zinc-800 dark:bg-zinc-950/98 lg:hidden"
           >
             <div className="mx-auto max-h-[min(70vh,520px)] max-w-7xl overflow-y-auto px-4 py-4 sm:px-5 lg:px-8">
-              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600 dark:text-zinc-400 sm:text-[13px]">
                 Navigate
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -150,7 +150,7 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "rounded-lg border border-zinc-200/90 bg-white px-3 py-2.5 text-[13px] font-medium text-zinc-800 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-200 dark:hover:border-zinc-700 dark:hover:bg-zinc-900",
+                      "rounded-lg border border-zinc-200/90 bg-white px-3 py-3 text-[15px] font-medium text-zinc-800 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-200 dark:hover:border-zinc-700 dark:hover:bg-zinc-900",
                       isActive(pathname, link.href) &&
                         "border-orange-600/45 bg-orange-50 dark:border-orange-500/35 dark:bg-orange-950/35",
                     )}

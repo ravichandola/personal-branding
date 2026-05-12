@@ -15,7 +15,7 @@ export function createMetadata({
   images?: string[];
 }): Metadata {
   const fullTitle =
-    title == null ? "Ravi Chandola • Automation × AI Architecture" : `${title} • Ravi`;
+    title == null ? "Ravi Chandola • Automation Technical Lead" : `${title} • Ravi`;
 
   const canonical = `${siteUrl}${path ?? ""}`;
 
@@ -23,7 +23,7 @@ export function createMetadata({
     title: fullTitle,
     description:
       description ??
-      "Staff-level automation architecture, LangGraph orchestration, Playwright mastery, agentic QA, and RAG-backed AI systems crafted for enterprise scale.",
+      "Test architecture, GenAI with guardrails (LangGraph), and Playwright/TypeScript delivery — legal tech, enterprise QA, and public-sector scale.",
 
     metadataBase: new URL(siteUrl),
 
