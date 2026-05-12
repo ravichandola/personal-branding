@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ravi_brand
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/ravi_brand
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      AUTH_SECRET: change-me-in-production
+      AUTH_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

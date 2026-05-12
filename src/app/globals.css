@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
+/* Frontend-Masters–adjacent: charcoal surfaces, single accent, minimal noise */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light dark;
+  --fm-bg: #fafaf9;
+  --fm-fg: #18181b;
+  --fm-muted: #71717a;
+  --fm-border: rgba(24, 24, 27, 0.12);
+  --fm-accent: #c2410c;
+  --fm-accent-hover: #9a3412;
+}
+
+.dark {
+  --fm-bg: #0c0d10;
+  --fm-fg: #fafafa;
+  --fm-muted: #a1a1aa;
+  --fm-border: rgba(255, 255, 255, 0.08);
+  --fm-accent: #ea580c;
+  --fm-accent-hover: #f97316;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans-variable);
+  --font-mono: var(--font-mono-variable);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    font-family:
+      var(--font-sans-variable),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    letter-spacing: -0.018em;
+    background-color: var(--fm-bg);
+    color: var(--fm-fg);
+    background-image: radial-gradient(
+      ellipse 120% 80% at 50% -30%,
+      rgba(194, 65, 12, 0.06),
+      transparent 55%
+    );
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-image: radial-gradient(
+      ellipse 100% 60% at 50% -25%,
+      rgba(234, 88, 12, 0.09),
+      transparent 50%
+    );
+  }
+
+  ::selection {
+    background: rgba(194, 65, 12, 0.22);
+    color: var(--fm-fg);
+  }
+
+  .dark ::selection {
+    background: rgba(234, 88, 12, 0.25);
+    color: #fff;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility glass-panel {
+  @apply rounded-xl border border-zinc-200/90 bg-white/85 shadow-sm backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950/85;
+}
+
+@utility text-gradient {
+  @apply text-zinc-900 dark:text-white;
+}
+
+@utility text-gradient-accent {
+  @apply text-orange-700 dark:text-orange-400;
+}
+
+@utility fm-surface {
+  @apply rounded-xl border border-zinc-200/90 bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/40;
 }

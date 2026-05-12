@@ -1,0 +1,354 @@
+// Ravi Chandola — personal branding platform
+// https://pris.ly/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+enum SkillBucket {
+  FRONTEND
+  BACKEND
+  AI_ML
+  AUTOMATION
+  DEVOPS
+  CLOUD
+  DATABASES
+  ARCHITECTURE
+}
+
+enum ProjectCategoryCode {
+  AI
+  AUTOMATION
+  REACT
+  BACKEND
+  PERFORMANCE
+  OCR
+  LANGGRAPH
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(ADMIN)
+  passwordHash  String?
+
+  accounts Account[]
+  sessions Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Profile {
+  id        String @id @default(cuid())
+
+  headline  String?
+  bio       String   @db.Text
+  rotatingTitles String[]
+  avatarUrl String?
+  resumeUrl String?
+
+  seoTitle       String?
+  seoDescription String?
+  canonicalBase  String?
+
+  statsYears          Int?
+  statsProjects       Int?
+  statsArticles       Int?
+  statsAutomationRuns Int?
+  statsAiExperiments  Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id        String   @id @default(cuid())
+  platform  String
+  url       String
+  label     String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([platform])
+}
+
+model Experience {
+  id           String    @id @default(cuid())
+  company      String
+  role         String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  summary      String    @db.Text
+  achievements String[]
+  technologies String[]
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([sortOrder])
+}
+
+model Category {
+  id    String           @id @default(cuid())
+  slug  String           @unique
+  name  String
+  blogs BlogOnCategory[]
+}
+
+model Tag {
+  id    String       @id @default(cuid())
+  slug  String       @unique
+  name  String
+  blogs BlogOnTag[]
+}
+
+model BlogPost {
+  id          String @id @default(cuid())
+
+  slug        String @unique
+  title       String
+  excerpt     String @db.Text
+  content     String @db.Text // MDX/markdown — rendered via next-mdx-remote
+
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  readingTimeMinutes Int?
+
+  seoTitle       String?
+  seoDescription String?
+  ogImage        String?
+
+  canonicalUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories BlogOnCategory[]
+  tags       BlogOnTag[]
+
+  @@index([published, featured])
+  @@index([publishedAt])
+}
+
+model BlogOnCategory {
+  blogId String
+  categoryId String
+
+  blog     BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([blogId, categoryId])
+  @@index([categoryId])
+}
+
+model BlogOnTag {
+  blogId String
+  tagId  String
+
+  blog BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  tag  Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([blogId, tagId])
+  @@index([tagId])
+}
+
+model Project {
+  id          String @id @default(cuid())
+  slug        String @unique
+  title       String
+  excerpt     String? @db.Text
+  description String  @db.Text
+  markdown    String  @db.Text
+
+  githubUrl String?
+  liveUrl   String?
+  images    String[] @default([])
+  tech      String[]
+  featured  Boolean @default(false)
+  published Boolean @default(true)
+
+  seoTitle       String?
+  seoDescription String?
+  ogImage        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories ProjectOnCategory[]
+
+  @@index([featured, published])
+}
+
+model ProjectOnCategory {
+  projectId String
+  categoryCode ProjectCategoryCode
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, categoryCode])
+  @@index([categoryCode])
+}
+
+model Skill {
+  id           String       @id @default(cuid())
+  name         String
+  slug         String       @unique
+  category     SkillBucket
+  proficiency  Int          @default(85)
+  years        Int?
+  sortOrder    Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([category, sortOrder])
+}
+
+model Testimonial {
+  id        String @id @default(cuid())
+  author    String
+  role      String?
+  company   String?
+  quote     String @db.Text
+  avatarUrl String?
+  rating    Int?   @default(5)
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Contact {
+  id           String          @id @default(cuid())
+  name         String
+  email        String
+  company      String?
+  role         String?
+  message      String          @db.Text
+  consent      Boolean        @default(true)
+  sourceIpHash String?
+  status       ContactStatus  @default(NEW)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  SPAM
+}
+
+model Settings {
+  id String @id @default("default")
+
+  siteName        String  @default("Ravi Chandola")
+  defaultTheme    String  @default("dark")
+  primaryGradient String  @default("from-cyan-500 via-violet-500 to-fuchsia-500")
+
+  metaTitle       String?
+  metaDescription String?
+  twitterHandle   String?
+  linkedInUrl     String?
+  mediumUrl       String?
+  githubOrgUrl    String?
+
+  googleAnalyticsId String?
+  contactNotifyEmail String?
+
+  updatedAt DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  path       String
+  referrer   String?
+  visitorId  String
+  userAgent  String?
+  country    String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path, createdAt])
+}
+
+model AiExtension {
+  id          String @id @default(cuid())
+
+  ragEnabled           Boolean @default(false)
+  defaultOpenAiModel   String?
+  embeddingModel       String?
+  vectorProvider       String?
+
+  webhookSecret        String?
+  notes                String? @db.Text
+
+  updatedAt DateTime @updatedAt
+}
+
+model RateLimiter {
+  id      String @id @default(cuid())
+  bucket  String @unique // e.g. contact:visitorHash
+  count   Int
+  resetsAt DateTime
+
+  @@index([resetsAt])
+}
