@@ -641,6 +641,131 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
     ],
   });
 
+  await prisma.testimonial.deleteMany();
+  await prisma.testimonial.createMany({
+    data: [
+      {
+        sortOrder: 0,
+        author: "Akshay Gadkari",
+        role:
+          "I help build products to its excellence with The Craft of Testing and Analysis ✅ | FinTech | Loans |",
+        quote:
+          "Ravi, you are the most enthusiastic person I have ever worked with. There are countless things you can do but let me mention here what you can't do. You are not a person who can sit idle for a single day without learning anything new. I have learned a lot from you. The passion you carry towards your work is simply amazing. Ravi is Optimistic about problem solving, and curious to explore various ways of automation. Great to work with 😊",
+        relationship: "Worked with Ravi on the same team",
+        writtenAt: new Date("2024-04-14"),
+      },
+      {
+        sortOrder: 1,
+        author: "Charlee Jain",
+        role: "Agile Project Manager | CSM® | PMP®",
+        quote:
+          "Ravi and I have worked in same scrum team. He is very sincere and hard working person. He has hunger to learn new things and find different ways to accomplish any task. He is very good at his work and a good team player.",
+        relationship:
+          "Was senior to Ravi but didn't manage Ravi directly",
+        writtenAt: new Date("2022-11-25"),
+      },
+      {
+        sortOrder: 2,
+        author: "Linda Tvrdy",
+        role:
+          "Passionate Advocate for Tech-Driven Social Change | Legal, Tech, & Education Expert | Results-Oriented Leader",
+        quote:
+          "Ravi and I worked closely together at Litera. I wrote our customer-facing documentation and Ravi was in charge of QA. He was a delight to work with. He very quickly developed a high-level understanding of how our complicated software should work. But he also worked hard to master the detailed way our users worked with the software. Ravi is also just a great person.",
+        relationship: "Worked with Ravi on the same team",
+        writtenAt: new Date("2022-11-24"),
+      },
+      {
+        sortOrder: 3,
+        author: "Gajendra Singh",
+        role:
+          "Lead Software Engineer | Backend & Full-Stack | Node.js, Kafka, AWS | High-Scale Event-Driven Systems",
+        quote:
+          "I enjoyed working with Ravi, fantastic team player. Always keen to improve the system and curious to know every bit of it. He was the first Quality engineer in our team and worked hard to lay down qa process. He is proactive and have great sense of responsibility.",
+        relationship: "Worked with Ravi on the same team",
+        writtenAt: new Date("2022-11-21"),
+      },
+      {
+        sortOrder: 4,
+        author: "Adam Trepanier",
+        role:
+          "Independent Software Consultant | Ruby on Rails | Postgres | Hotwire | Building software with my AI friends",
+        quote:
+          "Ravi was my lead SDET for our team based in India. Point blank, Ravi is a stellar team member. He is honest, thoughtful, and hungry to improve continuously. Ravi was instrumental in our process for validating releases for daily deploys. He was instrumental in raising issues around software testing in our Kanban process and recommended ways to improve it. Without his support, our software development process goals would not have been reached. Ravi is an excellent addition to any team!",
+        relationship: "Managed Ravi directly",
+        writtenAt: new Date("2022-01-14"),
+      },
+      {
+        sortOrder: 5,
+        author: "Anmol Mishra",
+        role: "Lead Automation QA at O2ive",
+        quote:
+          "Ravi has good coding knowledge when it comes in UI automation as well as API automation and is always eager to put his hands in new technologies, has a good ability in coordinating and teaching new technologies to junior colleagues as well.",
+        relationship:
+          "Worked with Ravi but they were at different companies",
+        writtenAt: new Date("2021-03-31"),
+      },
+      {
+        sortOrder: 6,
+        author: "Praveen Bhandari",
+        role:
+          "Technical Product Management - Digital Transformations, Cloud, Analytics, Gen AI",
+        quote:
+          "Ravi worked with me on couple of web development projects as SDET. He has good hands on knowledge in java and selenium and produced quality automation framework. I always found him ready to take on new challenges, learning new technologies and flexible in terms of picking up required tasks, be it Automation Testing, API monitoring, SRE or even working on front and development technologies. Keep up the spirits.",
+        relationship: "Managed Ravi directly",
+        writtenAt: new Date("2021-03-09"),
+      },
+      {
+        sortOrder: 7,
+        author: "Devendra Sawant",
+        role:
+          "Digital Transformation | Solution Architect | FullStack Observability Expert | DevSecOps | AIOps | Cloud Tech | GitOps | SRE | Linux | Leadership | Security | K8s | Helm | Terraform | Platform Engineering",
+        quote:
+          "Ravi and I worked together at Aditya Birla Finance Limited Digital for a year. I have known him to be a well balanced individual—technically strong and enjoyable to work with. He made work engaging, with solid depth in frontend (React JS) and backend (Java). Across domains and stacks he stayed hardworking, flexible, and someone teams could rely on when the scope kept shifting.",
+        relationship:
+          "Was senior to Ravi but didn't manage Ravi directly",
+        writtenAt: new Date("2021-03-08"),
+      },
+      {
+        sortOrder: 8,
+        author: "Rajesh Devakate",
+        role: "SDET",
+        quote:
+          "Ravi worked in my team as an automation expert, he has a zeal to go beyond. He has passion to learn and adopt new technologies. An out of box thinker. He delivers his work on time always. It was an pleasure to work with him.",
+        relationship: "Worked with Ravi on the same team",
+        writtenAt: new Date("2021-03-06"),
+      },
+      {
+        sortOrder: 9,
+        author: "Ashutosh Rathi",
+        role: null,
+        quote:
+          "Ravi has very good knowledge of new technologies. He has a good experience of developing and very good at coding.",
+        relationship: "Worked with Ravi on the same team",
+        writtenAt: new Date("2021-03-06"),
+      },
+      {
+        sortOrder: 10,
+        author: "Hitesh Gupta",
+        role: "QA Engineer",
+        quote:
+          "For Ravi I feel that he is very good in his work; when he gets a task he does it strategically with full focus. His technical knowledge is sound. There is no doubt and no question on his work capabilities. As a person he is very deep in thoughts. He keeps interest in knowing things in each area.",
+        relationship: "Worked with Ravi but on different teams",
+        writtenAt: new Date("2021-03-06"),
+      },
+      {
+        sortOrder: 11,
+        author: "Amiya Nayak",
+        role:
+          "Officer at State Street with over 9 years of working experience in Automation and Manual testing.",
+        quote:
+          "I worked with Ravi more than 2 years in Aqm technology. He is creative and a technology enthusiastic guy who always tries to implement new things in project and deliver it on time. He brings integrity and intelligence to his work—I believe his presence had positive impact on the organisation. Highly recommended.",
+        relationship:
+          "Was senior to Ravi but didn't manage Ravi directly",
+        writtenAt: new Date("2021-03-06"),
+      },
+    ],
+  });
+
   await prisma.user.deleteMany();
 
   await prisma.session.deleteMany();

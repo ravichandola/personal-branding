@@ -14,6 +14,7 @@ import {
   Landmark,
   Newspaper,
   Sparkles,
+  UserRound,
   Waves,
 } from "lucide-react";
 
@@ -218,8 +219,9 @@ function Pillars() {
           </p>
         </div>
         <Button asChild variant="primary" className="shadow-md shadow-orange-900/15 dark:shadow-orange-950/40">
-          <Link href="/about" prefetch>
-            About
+          <Link href="/about" prefetch className="gap-1.5">
+            About me
+            <UserRound className="h-4 w-4 shrink-0" aria-hidden />
           </Link>
         </Button>
       </div>

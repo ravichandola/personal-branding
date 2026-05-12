@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 import { PageIntro } from "@/components/marketing/page-intro";
 import { Card, CardInner } from "@/components/ui/card";
+import { RecommendationsSection } from "@/features/about/recommendations-section";
 import { SummaryTypewriter } from "@/features/about/summary-typewriter";
 
 const highlights: Array<{ title: string; body: string; icon: ReactNode }> = [
@@ -40,12 +41,23 @@ export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   let bio: string | null = null;
+  let recommendations: Awaited<
+    ReturnType<typeof prisma.testimonial.findMany>
+  > = [];
 
   try {
     const profile = await prisma.profile.findFirst({
       orderBy: { updatedAt: "desc" },
     });
     bio = profile?.bio ?? null;
+  } catch {
+    /* optional DB */
+  }
+
+  try {
+    recommendations = await prisma.testimonial.findMany({
+      orderBy: [{ sortOrder: "asc" }],
+    });
   } catch {
     /* optional DB */
   }
@@ -114,6 +126,8 @@ export default async function AboutPage() {
           </Card>
         ))}
       </div>
+
+      <RecommendationsSection items={recommendations} />
     </div>
   );
 }

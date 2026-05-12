@@ -13,6 +13,7 @@ import {
   NotebookPen,
   Orbit,
   Sparkles,
+  UserRound,
   Workflow,
 } from "lucide-react";
 
@@ -111,6 +112,12 @@ export function HomeHero({
               <Link prefetch href="/projects">
                 Browse projects
                 <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link prefetch href="/about">
+                About me
+                <UserRound className="h-4 w-4" aria-hidden />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">

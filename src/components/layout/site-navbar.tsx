@@ -16,7 +16,7 @@ import { SocialIcons } from "@/components/layout/social-icons";
 
 export const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About me", href: "/about" },
   { label: "Experience", href: "/experience" },
   { label: "Projects", href: "/projects" },
   { label: "Skills", href: "/skills" },
@@ -38,11 +38,11 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
   React.useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <header className="sticky top-0 z-[80] border-b border-zinc-200/85 bg-[#fafaf9]/92 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 dark:border-zinc-800/90 dark:bg-zinc-950/96 dark:supports-[backdrop-filter]:backdrop-saturate-150">
-      <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3.5 sm:px-5 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-items-stretch lg:gap-x-5 lg:gap-y-0 lg:px-8 lg:py-4 xl:gap-x-8">
+    <header className="sticky top-0 z-[80] w-full border-b border-zinc-200/85 bg-[#fafaf9]/92 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 dark:border-zinc-800/90 dark:bg-zinc-950/96 dark:supports-[backdrop-filter]:backdrop-saturate-150">
+      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3.5 sm:px-5 lg:flex-nowrap lg:gap-x-4 lg:px-8 lg:py-4 xl:gap-x-6">
         <Link
           href="/"
-          className="relative z-10 flex w-max max-w-full flex-col gap-0.5 leading-tight"
+          className="relative z-10 flex min-w-0 max-w-[min(100%,22rem)] shrink-0 flex-col gap-0.5 leading-tight sm:max-w-none"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400 sm:text-xs sm:tracking-[0.2em]">
             Automation architecture · GenAI · Legal tech
@@ -59,44 +59,55 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
 
         <nav
           aria-label="Main"
-          className="relative z-0 hidden min-w-0 justify-self-stretch lg:block"
+          className="relative z-0 hidden min-w-0 flex-1 items-center justify-center px-1 lg:flex"
         >
-          <div className="flex w-full max-w-full justify-center overflow-x-auto overscroll-x-contain px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <ul className="inline-flex w-max max-w-full flex-none flex-nowrap items-center justify-center gap-0 sm:gap-0.5">
-              {primaryLinks.map((link) => {
-                const active = isActive(pathname, link.href);
-                const isContact = link.href === "/contact";
-                return (
-                  <li key={link.href} className="shrink-0">
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        "relative block whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-3 sm:text-[15px]",
-                        isContact
-                          ? active
-                            ? "border border-orange-600/45 bg-orange-600/12 text-orange-900 dark:border-orange-500/40 dark:bg-orange-500/12 dark:text-orange-50"
-                            : "border border-zinc-300/90 bg-zinc-200/55 text-zinc-800 hover:bg-zinc-200/90 dark:border-zinc-700 dark:bg-zinc-900/65 dark:text-zinc-200 dark:hover:bg-zinc-800/90"
-                          : cn(
-                              "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
-                              active &&
-                                "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
-                            ),
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <ul className="flex max-w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 sm:gap-x-1">
+            {primaryLinks.map((link) => {
+              const active = isActive(pathname, link.href);
+              const isContact = link.href === "/contact";
+              return (
+                <li key={link.href} className="shrink-0">
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "relative block whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-2.5 sm:text-[15px]",
+                      isContact
+                        ? active
+                          ? "border border-orange-600/45 bg-orange-600/12 text-orange-900 dark:border-orange-500/40 dark:bg-orange-500/12 dark:text-orange-50"
+                          : "border border-zinc-300/90 bg-zinc-200/55 text-zinc-800 hover:bg-zinc-200/90 dark:border-zinc-700 dark:bg-zinc-900/65 dark:text-zinc-200 dark:hover:bg-zinc-800/90"
+                        : cn(
+                            "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
+                            active &&
+                              "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
+                          ),
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
 
-        <div className="flex items-center justify-end gap-1.5 sm:gap-2 lg:justify-self-end">
+        <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
           <div className="hidden items-center lg:flex">
             <SocialIcons surface="header" />
           </div>
           <ThemeToggle compact />
+
+          <Link
+            href="/about"
+            prefetch
+            className={cn(
+              "hidden shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 sm:inline-flex lg:hidden",
+              "dark:text-zinc-400 dark:hover:text-white",
+              pathname.startsWith("/about") &&
+                "text-orange-800 dark:text-orange-300",
+            )}
+          >
+            About me
+          </Link>
 
           <Button
             asChild
