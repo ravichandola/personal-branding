@@ -63,6 +63,7 @@ export function MediumPostLayout({
       </header>
       <div className="medium-mdx prose prose-invert prose-lg max-w-none prose-headings:font-serif prose-a:text-[#5bd37d] prose-blockquote:border-l-[#1a8917]">
         <MdxArticle
+          contentFormat="md"
           source={mediumMdxBodyWithoutDuplicateExcerpt(content, excerpt)}
         />
       </div>

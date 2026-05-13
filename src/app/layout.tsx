@@ -34,7 +34,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = createMetadata({
   path: "/",
-  title: SITE.title,
+  title: "Architecture · GenAI · Legal tech",
   description: SITE.description,
 });
 

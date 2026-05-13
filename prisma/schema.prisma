@@ -286,6 +286,10 @@ model Testimonial {
   featured  Boolean @default(false)
   sortOrder Int     @default(0)
   createdAt DateTime @default(now())
+  /// LinkedIn-style relationship line (e.g. "Managed Ravi directly").
+  relationship String?
+  /// When the recommendation was written (e.g. from LinkedIn).
+  writtenAt    DateTime?
 }
 
 model Contact {

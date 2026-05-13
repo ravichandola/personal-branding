@@ -1,12 +1,30 @@
+import { prisma } from "@/lib/prisma";
+
 import { PageIntro } from "@/components/marketing/page-intro";
 
-export default function Page() {
+import { ExperienceTimeline } from "@/features/experience/experience-timeline";
+
+export const dynamic = "force-dynamic";
+
+export default async function ExperiencePage() {
+  let items: Awaited<ReturnType<typeof prisma.experience.findMany>> = [];
+
+  try {
+    items = await prisma.experience.findMany({
+      orderBy: [{ sortOrder: "asc" }, { startDate: "desc" }],
+    });
+  } catch {
+    /* optional DB */
+  }
+
   return (
-    <div className="space-y-12">
-      <PageIntro eyebrow="Timeline" title="Experience — Litera · AQM Technologies · Medium authoring" description="Expandable timelines, technology matrices, and measurable outcomes will render from the Experience CMS. Current copy references leadership on automation architecture, legal tech OCR programs, Playwright estate migrations, and QA org design." />
-      <p className="text-sm text-slate-400">
-        Content is CMS-driven in production — scaffolded copy will hydrate from the Postgres + Prisma layer once you run `npm run db:seed`.
-      </p>
+    <div className="flex flex-col gap-10 sm:gap-12">
+      <PageIntro
+        eyebrow="Career"
+        title="Experience — Litera, AQM Technologies, Medium"
+        description="Timeline aligned with your LinkedIn profile: Litera (remote-first legal tech), self-employed Medium blogging, and AQM Digital Lending & insurance automation."
+      />
+      <ExperienceTimeline items={items} />
     </div>
   );
 }

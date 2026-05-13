@@ -1,17 +1,17 @@
 export const SITE = {
   name: "Ravi Chandola",
   handle: "@ravichandola",
-  title: "Ravi Chandola — Automation Architecture × Agentic AI",
+  title: "Ravi Chandola — Automation architecture · GenAI · Legal tech",
   description:
-    "Staff-level automation architecture, OCR & legal-tech platforms, LangGraph orchestration, Playwright TypeScript estates, enterprise QA leadership, and RAG-ready AI systems.",
+    "Automation Technical Lead at Litera — contributing to architecture & GenAI enablement, Playwright/TypeScript estates, and Sage (Cursor-native autocode + Jira-grounded tests; maintenance mode for crisis regressions). Legal tech PDF/OCR, lending, insurance, GSTN-scale APIs; Medium writer; B.E. EEE.",
 
   heroRotatingTitles: [
     "Automation Technical Lead",
-    "AI Engineer",
-    "Playwright Architect",
-    "LangGraph Developer",
-    "Full Stack QA Engineer",
-    "Agentic AI Builder",
+    "Sage · Cursor autocode",
+    "Test & platform architecture",
+    "GenAI & LangGraph practitioner",
+    "Legal tech & OCR automation",
+    "Technical blogger — Medium",
   ],
 
   urls: {
