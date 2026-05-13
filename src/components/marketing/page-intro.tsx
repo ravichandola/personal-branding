@@ -24,7 +24,7 @@ export function PageIntro({
         {title}
       </h1>
       {description ? (
-        <p className="max-w-3xl text-pretty text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 sm:text-xl sm:leading-[1.65]">
+        <p className="max-w-4xl text-pretty text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 sm:text-xl sm:leading-[1.65]">
           {description}
         </p>
       ) : null}

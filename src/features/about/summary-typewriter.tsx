@@ -122,7 +122,7 @@ export function SummaryTypewriter({
   return (
     <div
       className={cn(
-        "mx-auto flex max-w-3xl flex-col gap-10 sm:gap-12 md:gap-14",
+        "flex w-full max-w-prose flex-col gap-10 text-left sm:gap-12 md:gap-14",
         "text-lg font-normal leading-[1.92] tracking-[-0.01em] text-zinc-900 antialiased sm:text-xl sm:leading-[1.95] md:text-[1.3125rem] md:leading-[1.9] dark:text-zinc-100",
         className,
       )}

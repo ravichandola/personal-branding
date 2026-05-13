@@ -19,10 +19,8 @@ export const navLinks = [
   { label: "About me", href: "/about" },
   { label: "Experience", href: "/experience" },
   { label: "Projects", href: "/projects" },
-  { label: "Skills", href: "/skills" },
   { label: "Blogs", href: "/blogs" },
   { label: "Contact", href: "/contact" },
-  { label: "Resume", href: "/resume" },
 ] as const;
 
 const navLinkClass = (active: boolean) =>

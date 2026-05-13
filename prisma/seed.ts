@@ -80,7 +80,7 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
       seoDescription:
         "Litera automation lead — Sage (Cursor autocode, Jira-grounded tests, regression maintenance), contributing to architecture & GenAI, Playwright/TypeScript, legal tech PDF/OCR.",
       resumeUrl: "",
-      avatarUrl: "",
+      avatarUrl: "/portrait.png",
       statsYears: 8,
       statsProjects: 45,
       statsArticles: 25,
@@ -477,111 +477,223 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
 
   await prisma.project.deleteMany();
 
-  const sampleProjects = [
+  /** Order matters: last created appears first with `orderBy: { updatedAt: "desc" }`. */
+  const portfolioProjects: Array<{
+    slug: string;
+    title: string;
+    excerpt: string;
+    description: string;
+    markdown: string;
+    githubUrl: string;
+    liveUrl: string | null;
+    tech: string[];
+    categories: ProjectCategoryCode[];
+    featured: boolean;
+  }> = [
     {
-      slug: "playwright-fleet-fabric",
-
-      title: "Playwright Fleet Fabric",
-
+      slug: "backend-services",
+      title: "Backend Services — Payment gateway",
       excerpt:
-        "Composable fixtures, flaky auto-healing, deterministic telemetry overlays.",
+        "Production-style payment gateway API with Spring Boot, Spring Data JPA (Hibernate), MySQL, and Razorpay.",
+      description:
+        "Spring Boot service modelling a payment gateway flow with JPA persistence, MySQL, and Razorpay hooks — a backend reference for integrations, idempotency, and production-minded structure.",
+      markdown: `## Overview
 
-      markdown:
-        "## Overview\nDescribes how composable fixtures + infra-as-code power tenant-safe releases.",
+[backend-services](https://github.com/ravichandola/backend-services) is a **Spring Boot** backend shaped like a real payment gateway: layered services, persistence via **Spring Data JPA / Hibernate**, **MySQL**, and **Razorpay** as the payment rail.
 
+## What it demonstrates
+
+- REST-style APIs suitable for gateway-style flows  
+- Relational modelling and repository patterns with JPA  
+- External provider integration (Razorpay) and configuration hygiene  
+
+## Repository
+
+- [ravichandola/backend-services on GitHub](https://github.com/ravichandola/backend-services)
+`,
+      githubUrl: "https://github.com/ravichandola/backend-services",
+      liveUrl: null,
+      tech: ["Java", "Spring Boot", "MySQL", "Hibernate", "Razorpay"],
       categories: [
-        ProjectCategoryCode.AUTOMATION,
-
+        ProjectCategoryCode.BACKEND,
         ProjectCategoryCode.PERFORMANCE,
       ],
+      featured: false,
     },
-
     {
-      slug: "langgraph-citation-guard",
-
-      title: "LangGraph Citation Guard",
-
+      slug: "genai",
+      title: "GenAI — Agents, RAG & experiments",
       excerpt:
-        "Agent graph keeping OCR + RAG answers honest with eval harnesses.",
+        "Python workspace for GPT/Gemini workflows: Chain-of-Thought, personas, agents, RAG, and small apps — organised by topic.",
+      description:
+        "A curated GenAI playground in Python covering introductions, chain-of-thought, model comparison, personas, agent builds, RAG, RAG UIs, agentic workflows, and supporting utilities — OpenAI and Gemini via Pipenv.",
+      markdown: `## Overview
 
-      markdown:
-        "## Flow\nStep-through of retrieval, evaluation, escalation to classical automation.",
+[GenAI](https://github.com/ravichandola/GenAI) collects **AI-powered experiments** in Python: working with **OpenAI** and **Google Gemini**, organised into folders for introductions, **chain-of-thought**, **personas**, **agents**, **RAG**, **RAG-UI**, and **agentic workflows**.
 
-      categories: [ProjectCategoryCode.AI, ProjectCategoryCode.LANGGRAPH],
+## Highlights
+
+- Multiple topical modules (COT, agents, RAG, compare-models, etc.)  
+- Pipenv-managed dependencies and environment-driven API keys  
+- Practical README-driven setup for local experimentation  
+
+## Repository
+
+- [ravichandola/GenAI on GitHub](https://github.com/ravichandola/GenAI)
+`,
+      githubUrl: "https://github.com/ravichandola/GenAI",
+      liveUrl: null,
+      tech: [
+        "Python",
+        "OpenAI API",
+        "Google Gemini",
+        "Pipenv",
+        "RAG",
+        "Agents",
+      ],
+      categories: [
+        ProjectCategoryCode.AI,
+        ProjectCategoryCode.LANGGRAPH,
+      ],
+      featured: false,
     },
-
     {
-      slug: "ocr-surface-hardening",
-
-      title: "OCR Surface Hardening",
-
+      slug: "avengers",
+      title: "Avengers — Unified automation framework",
       excerpt:
-        "Pipeline patterns for legal PDF workloads with confidence scoring.",
+        "One Playwright-style API across browser, desktop, mobile, and API testing — consolidated automation surface.",
+      description:
+        "Open automation framework unifying browser, desktop, mobile, and API testing behind a single ergonomic API inspired by Playwright-style ergonomics.",
+      markdown: `## Overview
 
-      markdown:
-        "## Details\nHighlights chunking, redaction, regression cadence bridging OCR + deterministic QA.",
+[Avengers](https://github.com/ravichandola/Avengers) is a **unified automation framework** for **browser, desktop, mobile, and API** testing with a **single Playwright-style API** — one mental model across stacks instead of four disconnected toolchains.
 
-      categories: [ProjectCategoryCode.OCR, ProjectCategoryCode.AUTOMATION],
+## Why it matters
+
+- Reduces context-switching between UI, mobile, and service checks  
+- Keeps patterns reusable across channels  
+- Fits teams that want consistency more than yet another one-off harness  
+
+## Repository
+
+- [ravichandola/Avengers on GitHub](https://github.com/ravichandola/Avengers)
+`,
+      githubUrl: "https://github.com/ravichandola/Avengers",
+      liveUrl: null,
+      tech: [
+        "Automation",
+        "API testing",
+        "Mobile",
+        "Desktop",
+        "Browser",
+      ],
+      categories: [
+        ProjectCategoryCode.AUTOMATION,
+        ProjectCategoryCode.PERFORMANCE,
+      ],
+      featured: true,
     },
-
     {
-      slug: "react-flow-studio",
-
-      title: "React Flow Observability Studio",
-
+      slug: "personal-branding",
+      title: "Personal branding — Portfolio platform",
       excerpt:
-        "Topology visualisations for QA + automation fleets using React Flow.",
+        "Production-grade portfolio + CMS: Next.js 15, React 19, Prisma, Postgres, NextAuth, Tailwind v4, Docker, CI.",
+      description:
+        "This site’s codebase: marketing shell, admin CMS, auth, analytics hooks, and deployment-ready Docker/GitHub Actions story.",
+      markdown: `## Overview
 
-      markdown:
-        "## Studio\nInteractive graphs enumerating flaky clusters + remediation paths.",
+[personal-branding](https://github.com/ravichandola/personal-branding) is the **portfolio and CMS** behind this site — **Next.js 15** App Router, **React 19**, **Prisma** + **PostgreSQL**, **NextAuth.js**, **Tailwind CSS v4**, analytics, and Docker/GitHub Actions CI.
 
-      categories: [ProjectCategoryCode.REACT, ProjectCategoryCode.AUTOMATION],
+## Capabilities
+
+- Public marketing routes and authenticated **admin** console  
+- Content backed by Postgres via Prisma migrations  
+- Operational docs for Vercel deploy and environment wiring  
+
+## Repository
+
+- [ravichandola/personal-branding on GitHub](https://github.com/ravichandola/personal-branding)
+`,
+      githubUrl: "https://github.com/ravichandola/personal-branding",
+      liveUrl: null,
+      tech: [
+        "TypeScript",
+        "Next.js",
+        "Prisma",
+        "PostgreSQL",
+        "Tailwind CSS",
+        "Docker",
+      ],
+      categories: [
+        ProjectCategoryCode.REACT,
+        ProjectCategoryCode.BACKEND,
+        ProjectCategoryCode.AI,
+      ],
+      featured: true,
     },
-
     {
-      slug: "ai-testing-assistant",
-
-      title: "AI Testing Assistant",
-
+      slug: "sage",
+      title: "Sage — Cursor autocode & Jira context",
       excerpt:
-        "Hybrid copilot triaging regressions powered by deterministic evaluators.",
+        "Autocode layer on Cursor: repo-aware test drafts grounded in Jira stories, ACs, and maintenance workflows for regression crunch mode.",
+      description:
+        "Sage connects repositories and Jira-backed requirements to generate focused automation during development and crisis regressions.",
+      markdown: `## Overview
 
-      markdown:
-        "## Assistant mechanics\nDemonstrates interplay between conversational layers + scripted guardrails.",
+[Sage](https://github.com/ravichandola/Sage) is an **autocode-generation layer on Cursor**: it reasons about the **repository**, drafts **test flows** aligned to product change, and pulls **Jira** context (stories, acceptance criteria, links) so generated coverage maps to real work.
 
-      categories: [ProjectCategoryCode.AI, ProjectCategoryCode.PERFORMANCE],
+## Maintenance posture
+
+Includes thinking (and tooling direction) for **high-pressure regression windows** — when selectors and suites need to be remapped quickly while timelines stay fixed.
+
+## Repository
+
+- [ravichandola/Sage on GitHub](https://github.com/ravichandola/Sage)
+`,
+      githubUrl: "https://github.com/ravichandola/Sage",
+      liveUrl: null,
+      tech: [
+        "TypeScript",
+        "Cursor",
+        "Jira",
+        "Test automation",
+        "GenAI",
+      ],
+      categories: [
+        ProjectCategoryCode.AUTOMATION,
+        ProjectCategoryCode.AI,
+        ProjectCategoryCode.LANGGRAPH,
+      ],
+      featured: true,
     },
   ];
 
-  for (const blueprint of sampleProjects) {
-    const { categories, markdown, excerpt, slug, title } = blueprint;
+  for (const blueprint of portfolioProjects) {
+    const {
+      categories,
+      markdown,
+      excerpt,
+      slug,
+      title,
+      description,
+      githubUrl,
+      liveUrl,
+      tech,
+      featured,
+    } = blueprint;
 
     await prisma.project.create({
       data: {
         slug,
-
         title,
-
         excerpt,
-
-        description: markdown.slice(
-          0,
-
-          380,
-        ),
-
+        description,
         markdown,
-
-        featured: true,
-
+        featured,
         published: true,
-
-        githubUrl: `https://github.com/ravichandola/${slug}`,
-
-        liveUrl: `https://example.com/${slug}`,
-
-        tech: ["TypeScript", "PostgreSQL", "AWS"],
-
+        githubUrl,
+        liveUrl,
+        tech,
         categories: {
           create: categories.map((categoryCode) => ({ categoryCode })),
         },
@@ -596,32 +708,32 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
       {
         sortOrder: 0,
         published: true,
-        title: "Playwright Fleet Control Plane",
+        title: "Sage — Cursor autocode",
         summary:
-          "Tenant-aware estates, flaky auto-remediation loops, SLA-grade instrumentation.",
+          "Repo-aware drafts plus Jira-grounded flows; maintenance posture for brutal regression windows.",
         narrative:
-          "Multi-tenant Playwright estates need more than shared folders — they need identity per tenant, quota-aware runners, artifact retention policies, and dashboards that answer which estate is burning credits before leadership does. This control plane treats flaky tests as operational data: automatic quarantine, reruns with bounded blast radius, and remediation hooks that push failures back to owning teams with context. Instrumentation is SLA-grade: trace IDs from test start through artifact upload, budget alerts, and contract tests that fail the deploy if the fleet itself regresses.",
-        projectSlug: "playwright-fleet-fabric",
+          "Sage sits on Cursor as an autocode layer: it reads the repository, proposes concrete test flows tied to what changed, and pulls structured Jira context so engineers aren’t guessing acceptance criteria from memory. When timelines compress and UIs churn, the maintenance-oriented workflows prioritize risk, remap selectors, and refocus suites using impact signals — so teams keep signal instead of drowning in rewrite noise.",
+        projectSlug: "sage",
       },
       {
         sortOrder: 1,
         published: true,
-        title: "RAG Legal Companion",
+        title: "Avengers — Unified automation",
         summary:
-          "Chunking precedent libraries with OCR-aware guardrails plus eval harness.",
+          "One Playwright-style surface across browser, desktop, mobile, and API testing.",
         narrative:
-          "Legal research RAG dies in the gap between slick demos and messy PDFs — scanned exhibits, redacted clauses, and citation rules that change by jurisdiction. This companion pairs OCR-aware ingestion with chunking that respects document structure, then layers eval harnesses: golden Q&A sets, refusal boundaries around privileged content, and human-in-the-loop review queues when confidence drops. Guardrails are explicit: source attribution on every answer, blocked paths for sealed or non-public corpora, and regression suites that run nightly against precedent drift.",
-        projectSlug: "langgraph-citation-guard",
+          "Avengers treats automation as one product: shared patterns and APIs whether you are driving a browser, desktop shell, mobile client, or HTTP contracts. The payoff is less bespoke glue per channel — consistent fixtures, shared reporting vocabulary, and engineers who can rotate across surfaces without re-learning entirely different frameworks.",
+        projectSlug: "avengers",
       },
       {
         sortOrder: 2,
         published: true,
-        title: "Performance Radar Suite",
+        title: "Portfolio platform — this site",
         summary:
-          "JMeter choreography, bottleneck overlays spanning prod-traffic hybrids.",
+          "Next.js 15, Prisma CMS, auth, analytics — production-minded OSS scaffold.",
         narrative:
-          "Performance testing only helps when it mimics reality without becoming impossible to maintain. This suite choreographs JMeter (and friends) against hybrid traffic models — replayed production shapes blended with synthetic edge cases — and renders bottleneck overlays that tie latency spikes to deploy windows, dependency versions, and fixture changes. The operator-facing goal is a single radar: reproducible scenarios, clear ownership, and a straight answer to whether a release slowed the system and where.",
-        projectSlug: null,
+          "The personal-branding repo is the codebase behind this marketing site and admin console: App Router, Postgres-backed CMS patterns, JWT-protected admin routes, analytics beacons, Docker + CI that exercise migrations against real Postgres. It is the reference implementation for how portfolio content, projects, and ops docs stay versioned together.",
+        projectSlug: "personal-branding",
       },
     ],
   });
