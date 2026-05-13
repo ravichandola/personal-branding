@@ -5,7 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +24,14 @@ export const navLinks = [
   { label: "Contact", href: "/contact" },
   { label: "Resume", href: "/resume" },
 ] as const;
+
+const navLinkClass = (active: boolean) =>
+  cn(
+    "relative block whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-2.5 sm:text-[15px]",
+    "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
+    active &&
+      "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
+  );
 
 function isActive(pathname: string, href: string) {
   return pathname === href || (href !== "/" && pathname.startsWith(href));
@@ -64,23 +72,11 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
           <ul className="flex max-w-full flex-wrap items-center justify-center gap-x-0.5 gap-y-1 sm:gap-x-1">
             {primaryLinks.map((link) => {
               const active = isActive(pathname, link.href);
-              const isContact = link.href === "/contact";
               return (
                 <li key={link.href} className="shrink-0">
                   <Link
                     href={link.href}
-                    className={cn(
-                      "relative block whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-2.5 sm:text-[15px]",
-                      isContact
-                        ? active
-                          ? "border border-orange-600/45 bg-orange-600/12 text-orange-900 dark:border-orange-500/40 dark:bg-orange-500/12 dark:text-orange-50"
-                          : "border border-zinc-300/90 bg-zinc-200/55 text-zinc-800 hover:bg-zinc-200/90 dark:border-zinc-700 dark:bg-zinc-900/65 dark:text-zinc-200 dark:hover:bg-zinc-800/90"
-                        : cn(
-                            "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
-                            active &&
-                              "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
-                          ),
-                    )}
+                    className={navLinkClass(active)}
                   >
                     {link.label}
                   </Link>
@@ -100,27 +96,23 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
             href="/about"
             prefetch
             className={cn(
-              "hidden shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 sm:inline-flex lg:hidden",
-              "dark:text-zinc-400 dark:hover:text-white",
-              pathname.startsWith("/about") &&
-                "text-orange-800 dark:text-orange-300",
+              navLinkClass(isActive(pathname, "/about")),
+              "hidden shrink-0 sm:inline-flex lg:hidden",
             )}
           >
             About me
           </Link>
 
-          <Button
-            asChild
-            size="md"
-            variant="primary"
-            className="hidden shrink-0 shadow-md shadow-orange-900/20 sm:inline-flex dark:shadow-orange-950/50"
+          <Link
+            href="/contact"
+            prefetch
+            className={cn(
+              navLinkClass(isActive(pathname, "/contact")),
+              "hidden shrink-0 sm:inline-flex lg:hidden",
+            )}
           >
-            <Link href="/contact" prefetch className="gap-1.5">
-              <span className="hidden lg:inline">Get in touch</span>
-              <span className="lg:hidden">Contact</span>
-              <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden />
-            </Link>
-          </Button>
+            Contact
+          </Link>
 
           <Separator
             orientation="vertical"

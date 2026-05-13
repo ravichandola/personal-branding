@@ -1,10 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import slugify from "slugify";
 import { z } from "zod";
 
 import { auth } from "@/auth";
+import { BLOGS_LIST_CACHE_TAG } from "@/lib/blogs-list-data";
 import { prisma } from "@/lib/prisma";
 import { isMediumArticleUrl } from "@/lib/external-content";
 
@@ -109,6 +110,7 @@ export async function createBlogAction(
     revalidatePath("/admin/blogs");
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${slug}`);
+    revalidateTag(BLOGS_LIST_CACHE_TAG);
     return { ok: true, message: "Blog post created." };
   } catch {
     return { ok: false, message: "Could not create post." };
@@ -169,6 +171,7 @@ export async function updateBlogAction(
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${existing.slug}`);
     revalidatePath(`/blogs/${slug}`);
+    revalidateTag(BLOGS_LIST_CACHE_TAG);
     return { ok: true, message: "Blog post updated." };
   } catch {
     return { ok: false, message: "Could not update post." };
@@ -192,6 +195,7 @@ export async function deleteBlogAction(
     revalidatePath("/admin/blogs");
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${post.slug}`);
+    revalidateTag(BLOGS_LIST_CACHE_TAG);
     return { ok: true, message: "Deleted." };
   } catch {
     return { ok: false, message: "Could not delete." };
