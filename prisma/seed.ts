@@ -472,23 +472,8 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
     ],
   });
 
-  await prisma.blogPost.deleteMany();
-
-  await prisma.blogPost.create({
-    data: {
-      slug: "deterministic-ai-guardrails",
-      title: "Operationalizing deterministic guardrails around agent loops",
-      excerpt:
-        "Thoughts on marrying LangGraph state machines with Playwright regressions.",
-      content:
-        "## Guardrails first\n\nAutomation architects must treat agent outputs as untrusted until validated through deterministic harnesses.",
-      featured: true,
-      published: true,
-      publishedAt: new Date(),
-      readingTimeMinutes: 9,
-      seoTitle: "Deterministic guardrails for agent loops",
-    },
-  });
+  // Blog posts: load from Medium via RSS (upsert; does not delete other posts):
+  //   npm run db:sync-medium
 
   await prisma.project.deleteMany();
 
