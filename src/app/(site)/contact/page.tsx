@@ -13,7 +13,7 @@ export default function ContactPage() {
           <PageIntro
             eyebrow="Get in touch"
             title="Let’s talk about the problem you are trying to solve."
-            description="Use the form for project inquiries, collaborations, or clear asks. I read everything that comes through and will reply by email. Social links stay in the site footer if you want to connect there too."
+            description="You’re hiring a person, not a ticket queue—use this form for project inquiries, collaborations, or a direct ask. I read every submission and answer from my own inbox. Prefer another channel? Social links live in the footer."
           />
           <div className="page-rule" aria-hidden />
         </header>
@@ -34,11 +34,13 @@ export default function ContactPage() {
                 id="contact-form-heading"
                 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
               >
-                Send a note
+                Start the conversation
               </h2>
-              <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg sm:leading-[1.65]">
-                No login required. Fields marked by validation hints below —
-                keep it specific so replies stay useful.
+              <p className="max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg sm:leading-[1.65]">
+                Share what you&apos;re building, where you&apos;re stuck, and what
+                a good outcome looks like. No account or login—just the details I
+                need to reply with something useful, straight to the email you
+                leave below.
               </p>
             </header>
 
