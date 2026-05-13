@@ -12,11 +12,9 @@ const BUCKET_LABEL: Record<SkillBucket, string> = {
   ARCHITECTURE: "Architecture",
 };
 
-const sectionPanel =
-  "relative overflow-hidden rounded-[1.75rem] border border-zinc-200/90 bg-gradient-to-b from-zinc-50/95 via-white/92 to-zinc-100/80 p-8 shadow-sm ring-1 ring-black/[0.03] dark:border-zinc-800/90 dark:from-zinc-950/95 dark:via-zinc-950/75 dark:to-black/50 dark:ring-white/[0.04] sm:p-10 lg:p-12";
+const sectionPanel = "marketing-shell";
 
-const sectionGlow =
-  "pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-orange-400/18 blur-3xl dark:bg-orange-500/22";
+const sectionGlow = "marketing-glow-tr";
 
 export function AboutSkillsSection({ skills }: { skills: Skill[] }) {
   const byCategory = skills.reduce<Partial<Record<SkillBucket, Skill[]>>>((acc, s) => {
@@ -36,25 +34,25 @@ export function AboutSkillsSection({ skills }: { skills: Skill[] }) {
       <div className={sectionPanel}>
         <div className={sectionGlow} aria-hidden />
         <div
-          className="pointer-events-none absolute -bottom-28 right-1/3 h-44 w-44 rounded-full bg-orange-600/10 blur-3xl dark:bg-orange-600/14"
+          className="pointer-events-none absolute -bottom-28 right-1/3 h-44 w-44 rounded-full bg-accent/10 blur-3xl dark:bg-accent/14"
           aria-hidden
         />
 
         <header className="relative z-[1] mb-8 space-y-4 sm:mb-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 sm:text-base">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent sm:text-base">
             Capability mesh
           </p>
           <h2
             id="about-skills-heading"
-            className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-3xl"
+            className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
           >
             Skills & depth
           </h2>
-          <p className="max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg sm:leading-[1.65]">
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg sm:leading-[1.65]">
             Proficiency and tenure from the same list you maintain under{" "}
             <a
               href="/admin/skills"
-              className="font-semibold text-orange-700 underline-offset-4 hover:underline dark:text-orange-400"
+              className="font-semibold text-accent underline-offset-4 hover:underline"
             >
               Admin → Skills
             </a>
@@ -63,15 +61,15 @@ export function AboutSkillsSection({ skills }: { skills: Skill[] }) {
         </header>
 
         {skills.length === 0 ? (
-          <div className="relative z-[1] rounded-2xl border border-dashed border-zinc-300/90 bg-white/70 px-6 py-8 dark:border-zinc-700 dark:bg-zinc-950/45 sm:px-8">
-            <p className="max-w-prose text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <div className="relative z-[1] marketing-dash-callout">
+            <p className="max-w-prose text-base leading-relaxed text-muted-foreground">
               No skills in the database yet. Run{" "}
-              <code className="rounded-md border border-zinc-200 bg-zinc-100 px-2 py-0.5 text-[13px] dark:border-zinc-700 dark:bg-zinc-900">
+              <code className="surface-code-inline">
                 npm run db:seed
               </code>{" "}
               or add entries in{" "}
               <a
-                className="font-semibold text-orange-700 underline-offset-4 hover:underline dark:text-orange-400"
+                className="font-semibold text-accent underline-offset-4 hover:underline"
                 href="/admin/skills"
               >
                 Admin → Skills
@@ -86,25 +84,25 @@ export function AboutSkillsSection({ skills }: { skills: Skill[] }) {
               if (!list?.length) return null;
               return (
                 <div key={cat} className="space-y-4">
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {BUCKET_LABEL[cat]}
                   </h3>
                   <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {list.map((s) => (
                       <li
                         key={s.id}
-                        className="rounded-xl border border-zinc-200/95 bg-white/90 p-4 dark:border-zinc-800 dark:bg-zinc-950/70"
+                        className="rounded-xl border border-border bg-card/90 p-4 dark:bg-card/70"
                       >
-                        <p className="font-medium text-zinc-900 dark:text-white">
+                        <p className="font-medium text-foreground">
                           {s.name}
                         </p>
-                        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+                        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                           <span>{s.proficiency}% proficiency</span>
                           {s.years != null ? <span>{s.years}+ yrs</span> : null}
                         </div>
-                        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
                           <div
-                            className="h-full rounded-full bg-orange-600 dark:bg-orange-500"
+                            className="h-full rounded-full bg-accent"
                             style={{
                               width: `${Math.min(100, Math.max(0, s.proficiency))}%`,
                             }}

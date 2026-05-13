@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { storedCategorySlugsMatchingTopic } from "@/lib/blog-topic";
 import type { BlogPostListRow } from "@/lib/blogs-list";
 import {
   BLOG_SEARCH_MIN_CHARS,
@@ -65,11 +66,21 @@ describe("Lib suite · blogs listing & cards", () => {
         expect(w).toMatchObject({ published: true });
       });
 
-      it("adds topic filter", () => {
+      it("adds topic filter with legacy slug expansion", () => {
         const w = blogListWhere("", "git");
-        expect(w.categories).toEqual({
-          some: { category: { slug: "git" } },
+        expect(w).toMatchObject({
+          published: true,
+          categories: {
+            some: {
+              category: {
+                slug: { in: storedCategorySlugsMatchingTopic("git") },
+              },
+            },
+          },
         });
+        expect(storedCategorySlugsMatchingTopic("testing").sort()).toEqual(
+          ["performance-characterization", "playwright-labs", "testing"].sort(),
+        );
       });
 
       it("combines tokens with AND", () => {
@@ -93,6 +104,45 @@ describe("Lib suite · blogs listing & cards", () => {
           { category: { slug: "javascript", name: "JavaScript" } },
         ],
       };
+
+      it("maps legacy category slug to chip topic", () => {
+        const post: BlogPostListRow = {
+          ...basePost,
+          categories: [{ category: { slug: "react-surfaces", name: "React" } }],
+        };
+        expect(blogPostMatchesFilters(post, "", "react")).toBe(true);
+        expect(blogPostMatchesFilters(post, "", "javascript")).toBe(false);
+      });
+
+      it("infers topic when no categories (e.g. Medium stub from admin)", () => {
+        const post: BlogPostListRow = {
+          id: "2",
+          slug: "stub",
+          title: "Playwright and CI",
+          excerpt: "End-to-end automation notes",
+          featured: false,
+          publishedAt: null,
+          readingTimeMinutes: null,
+          canonicalUrl: null,
+          categories: [],
+        };
+        expect(blogPostMatchesFilters(post, "", "testing")).toBe(true);
+      });
+
+      it("infers React from copy when categories empty", () => {
+        const post: BlogPostListRow = {
+          id: "3",
+          slug: "r",
+          title: "Hooks in React 19",
+          excerpt: "Working with useEffect",
+          featured: false,
+          publishedAt: null,
+          readingTimeMinutes: null,
+          canonicalUrl: null,
+          categories: [],
+        };
+        expect(blogPostMatchesFilters(post, "", "react")).toBe(true);
+      });
 
       it("matches topic by category slug", () => {
         expect(blogPostMatchesFilters(basePost, "", "javascript")).toBe(true);

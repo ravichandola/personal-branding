@@ -9,15 +9,15 @@ const badgeVariants = cva(
     variants: {
       tone: {
         accent:
-          "border-orange-600/35 bg-orange-600/10 text-orange-800 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-200",
+          "border-accent/35 bg-accent/10 text-foreground dark:text-foreground",
         muted:
-          "border-zinc-300 bg-zinc-100 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400",
+          "border-border bg-muted text-muted-foreground",
         violet:
           "border-violet-500/25 bg-violet-500/10 text-violet-800 dark:text-violet-200",
         neon:
-          "border-orange-600/35 bg-orange-600/10 text-orange-800 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-200",
+          "border-accent/35 bg-accent/10 text-foreground dark:text-foreground",
         slate:
-          "border-zinc-300 bg-zinc-100 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400",
+          "border-border bg-muted text-muted-foreground",
       },
     },
     defaultVariants: {

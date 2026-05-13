@@ -5,26 +5,26 @@ import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold tracking-tight transition-colors active:translate-y-[0.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600/45 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 disabled:pointer-events-none disabled:opacity-40 dark:focus-visible:ring-orange-500/45 dark:focus-visible:ring-offset-zinc-950",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold tracking-tight transition-colors active:translate-y-[0.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-40",
 
   {
     variants: {
       variant: {
         primary:
-          "border border-orange-700 bg-orange-700 text-white hover:bg-orange-800 dark:border-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500",
+          "border border-transparent bg-accent text-accent-foreground shadow-sm shadow-accent/25 hover:bg-accent-hover",
         secondary:
-          "border border-zinc-300 bg-transparent text-zinc-800 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800/80",
+          "border border-border bg-muted/50 text-foreground hover:bg-muted",
         outline:
-          "border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-100 dark:hover:bg-zinc-800/60",
+          "border border-border bg-background/80 text-foreground hover:bg-muted",
         ghost:
-          "border-transparent text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800/60",
+          "border-transparent text-foreground hover:bg-muted",
         /** @deprecated use `primary` — alias for older call sites */
         glow:
-          "border border-orange-700 bg-orange-700 text-white hover:bg-orange-800 dark:border-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500",
+          "border border-transparent bg-accent text-accent-foreground shadow-sm hover:bg-accent-hover",
         glass:
-          "border border-zinc-200/80 bg-zinc-100/60 text-zinc-900 hover:bg-zinc-200/70 dark:border-zinc-700 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800/70",
+          "border border-border bg-muted/40 text-foreground hover:bg-muted/70",
         muted:
-          "border border-zinc-200 bg-zinc-100 text-zinc-800 hover:bg-zinc-200/90 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800",
+          "border border-border bg-muted text-foreground hover:bg-muted/80",
       },
       size: {
         sm: "h-9 px-3 text-[13px]",

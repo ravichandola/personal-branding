@@ -1,7 +1,7 @@
 /**
  * Import Medium account export (.zip) into BlogPost + topic categories.
  *
- * Categories (keyword rules): Gen AI, Java, JavaScript, Git, Other.
+ * Categories (keyword rules): Gen AI, React, Testing, Java, JavaScript, Git, Other.
  *
  * Usage:
  *   MEDIUM_EXPORT_ZIP=/path/to/medium-export-....zip npm run db:import-medium-export
@@ -17,51 +17,17 @@ import * as cheerio from "cheerio";
 import TurndownService from "turndown";
 
 import { PrismaClient } from "../src/generated/prisma";
+import {
+  BLOG_TOPIC_LABELS,
+  BLOG_TOPIC_SLUGS,
+  type BlogTopicSlug,
+  inferBlogTopicSlug,
+} from "../src/lib/blog-topic";
 
 const prisma = new PrismaClient();
 
-const TOPIC_CATALOG = [
-  { slug: "gen-ai", name: "Gen AI" },
-  { slug: "java", name: "Java" },
-  { slug: "javascript", name: "JavaScript" },
-  { slug: "git", name: "Git" },
-  { slug: "other", name: "Other" },
-] as const;
-
-type TopicSlug = (typeof TOPIC_CATALOG)[number]["slug"];
-
 function stripTags(html: string): string {
   return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-}
-
-function classifyTopic(title: string, excerpt: string, bodyHtml: string): TopicSlug {
-  const sample = `${title}\n${excerpt}\n${stripTags(bodyHtml).slice(0, 6000)}`.toLowerCase();
-
-  const genAi =
-    /\brag\b|langgraph|langchain|openai|generative ai|\bgenai\b|\bllm\b|evals|chatbot|foundation model|\bai agent|agentic|anthropic|vector embed|retrieval[- ]augmented|persona.*chatbot|prompt mastery|token saving|\btransformer\b|\bgpt\b|multimodal ai/i.test(
-      sample,
-    );
-  if (genAi) return "gen-ai";
-
-  const javascript =
-    /\bjavascript\b|\btypescript\b|\breact\b|node\.js|\bnodejs\b|\bnpm\b|usestate|\bjsx\b|reconciliation|next\.js|server component|package\.json|hook\b|\.tsx\b|web ?3\.0|arrow function|docker run/i.test(
-      sample,
-    );
-  if (javascript) return "javascript";
-
-  const java =
-    /\bjava\b(?!script)|\bjvm\b|spring\b|maven\b|multithread|thread group|thread life|thread priority|jdbc\b|interface\b.*coupling|selenium|playwright.*java|junit|gradle/i.test(
-      sample,
-    );
-  if (java) return "java";
-
-  const git =
-    /\bgit\b|github|gitlab|git repository|\.git\b|git init|git stash|pushing code to git|commit\b|merge conflict|two github accounts/i.test(
-      sample,
-    );
-  if (git) return "git";
-
-  return "other";
 }
 
 function slugFromCanonical(canonical: string): string | null {
@@ -102,11 +68,11 @@ function estimateReadMinutes(text: string): number {
 }
 
 async function ensureCategories() {
-  for (const t of TOPIC_CATALOG) {
+  for (const slug of BLOG_TOPIC_SLUGS) {
     await prisma.category.upsert({
-      where: { slug: t.slug },
-      create: { slug: t.slug, name: t.name },
-      update: { name: t.name },
+      where: { slug },
+      create: { slug, name: BLOG_TOPIC_LABELS[slug] },
+      update: { name: BLOG_TOPIC_LABELS[slug] },
     });
   }
 }
@@ -135,13 +101,9 @@ async function main() {
 
   await ensureCategories();
 
-  const topicCounts: Record<TopicSlug, number> = {
-    "gen-ai": 0,
-    java: 0,
-    javascript: 0,
-    git: 0,
-    other: 0,
-  };
+  const topicCounts = Object.fromEntries(
+    [...BLOG_TOPIC_SLUGS].map((slug) => [slug, 0]),
+  ) as Record<BlogTopicSlug, number>;
 
   let skipped = 0;
   let imported = 0;
@@ -187,7 +149,11 @@ async function main() {
       if (!Number.isNaN(d.getTime())) publishedAt = d;
     }
 
-    const topic = classifyTopic(title, excerpt, bodyHtml);
+    const topic = inferBlogTopicSlug(
+      title,
+      excerpt,
+      stripTags(bodyHtml).slice(0, 6000),
+    );
     topicCounts[topic] += 1;
 
     const markdown = htmlToMarkdown(bodyHtml);

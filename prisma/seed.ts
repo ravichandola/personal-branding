@@ -5,6 +5,7 @@ import {
   SkillBucket,
   ProjectCategoryCode,
 } from "../src/generated/prisma";
+import { BLOG_TOPIC_LABELS, BLOG_TOPIC_SLUGS } from "../src/lib/blog-topic";
 
 const prisma = new PrismaClient();
 
@@ -450,26 +451,10 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
 
   await prisma.category.deleteMany();
   await prisma.category.createMany({
-    data: [
-      { slug: "langgraph-orchestration", name: "LangGraph" },
-
-      { slug: "playwright-labs", name: "Playwright" },
-
-      { slug: "ai-platforms", name: "AI Engineering" },
-
-      { slug: "rag-systems", name: "RAG" },
-
-      { slug: "react-surfaces", name: "React" },
-
-      { slug: "aws-automation-backbone", name: "AWS" },
-
-      {
-        slug: "architecture-thought-leadership",
-        name: "Automation Architecture",
-      },
-
-      { slug: "performance-characterization", name: "Performance Testing" },
-    ],
+    data: [...BLOG_TOPIC_SLUGS].map((slug) => ({
+      slug,
+      name: BLOG_TOPIC_LABELS[slug],
+    })),
   });
 
   // Blog posts: load from Medium via RSS (upsert; does not delete other posts):

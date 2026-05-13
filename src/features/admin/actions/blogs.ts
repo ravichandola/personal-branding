@@ -7,6 +7,7 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { BLOGS_LIST_CACHE_TAG } from "@/lib/blogs-list-data";
 import { prisma } from "@/lib/prisma";
+import { assignInferredBlogTopic } from "@/lib/sync-blog-category";
 import { isMediumArticleUrl } from "@/lib/external-content";
 
 export type BlogsActionState = { ok: boolean; message: string } | null;
@@ -94,7 +95,7 @@ export async function createBlogAction(
   const content = mediumStubContent(mediumUrl);
 
   try {
-    await prisma.blogPost.create({
+    const post = await prisma.blogPost.create({
       data: {
         slug,
         title: parsed.data.title.trim(),
@@ -107,6 +108,11 @@ export async function createBlogAction(
         readingTimeMinutes: null,
       },
     });
+    await assignInferredBlogTopic(
+      post.id,
+      post.title,
+      post.excerpt,
+    );
     revalidatePath("/admin/blogs");
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${slug}`);
@@ -167,6 +173,11 @@ export async function updateBlogAction(
           : null,
       },
     });
+    await assignInferredBlogTopic(
+      id,
+      parsed.data.title.trim(),
+      parsed.data.excerpt.trim(),
+    );
     revalidatePath("/admin/blogs");
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${existing.slug}`);

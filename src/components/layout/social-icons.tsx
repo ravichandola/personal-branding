@@ -25,8 +25,8 @@ export function SocialIcons({
 
   const tileClass =
     surface === "header"
-      ? "grid h-8 w-8 place-items-center rounded-md border border-zinc-200/90 bg-white text-zinc-500 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700/80 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-white"
-      : "grid h-9 w-9 place-items-center rounded-lg border border-zinc-300 bg-white text-zinc-700 transition-colors hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80";
+      ? "grid h-8 w-8 place-items-center rounded-md border border-border bg-background/70 text-muted-foreground shadow-none transition-colors hover:border-accent/35 hover:bg-muted hover:text-foreground dark:bg-transparent"
+      : "grid h-9 w-9 place-items-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:border-accent/30 hover:bg-muted hover:text-foreground";
 
   const iconSm = surface === "header" ? "h-[15px] w-[15px]" : "h-5 w-5";
 

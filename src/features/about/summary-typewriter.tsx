@@ -23,7 +23,7 @@ function Cursor({ visible }: { visible: boolean }) {
     <span
       aria-hidden
       className={cn(
-        "ml-0.5 inline-block w-[0.55em] translate-y-px align-baseline text-orange-600 dark:text-orange-400",
+        "ml-0.5 inline-block w-[0.55em] translate-y-px align-baseline text-accent",
         visible ? "opacity-100" : "opacity-25",
       )}
     >
@@ -123,7 +123,7 @@ export function SummaryTypewriter({
     <div
       className={cn(
         "flex w-full max-w-prose flex-col gap-10 text-left sm:gap-12 md:gap-14",
-        "text-lg font-normal leading-[1.92] tracking-[-0.01em] text-zinc-900 antialiased sm:text-xl sm:leading-[1.95] md:text-[1.3125rem] md:leading-[1.9] dark:text-zinc-100",
+        "text-lg font-normal leading-[1.92] tracking-[-0.01em] text-foreground antialiased sm:text-xl sm:leading-[1.95] md:text-[1.3125rem] md:leading-[1.9]",
         className,
       )}
       aria-busy={!reduceMotion && !allDone}
