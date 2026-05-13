@@ -20,11 +20,11 @@ export function PageIntro({
       <Badge tone="violet" className="px-3 py-1.5 text-xs tracking-[0.12em] sm:text-sm sm:px-3.5 sm:py-2">
         {eyebrow}
       </Badge>
-      <h1 className="max-w-4xl text-balance text-[2.125rem] font-semibold leading-[1.12] tracking-tight text-zinc-900 dark:text-white sm:text-4xl sm:leading-[1.1] md:text-5xl md:leading-[1.08] lg:text-[3.25rem]">
+      <h1 className="max-w-4xl text-balance text-[2.125rem] font-semibold leading-[1.12] tracking-tight text-foreground sm:text-4xl sm:leading-[1.1] md:text-5xl md:leading-[1.08] lg:text-[3.25rem]">
         {title}
       </h1>
       {description ? (
-        <p className="max-w-4xl text-pretty text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 sm:text-xl sm:leading-[1.65]">
+        <p className="max-w-4xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl sm:leading-[1.65]">
           {description}
         </p>
       ) : null}

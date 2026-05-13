@@ -28,18 +28,18 @@ export function SiteFooter() {
   return (
     <footer
       className={cn(
-        "relative mt-24 overflow-hidden border-t border-zinc-200/90",
-        "bg-gradient-to-b from-zinc-50 via-zinc-100/80 to-zinc-100",
-        "dark:border-white/[0.07] dark:from-[#0c0d10] dark:via-zinc-950/95 dark:to-[#08090b]",
+        "relative mt-24 overflow-hidden border-t border-border",
+        "bg-gradient-to-b from-background via-muted/30 to-muted/50",
+        "dark:border-border dark:from-background dark:via-background dark:to-muted/80",
       )}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-500/45 to-transparent dark:via-orange-400/35"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent dark:via-accent/35"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 top-24 h-72 w-72 rounded-full bg-orange-500/[0.06] blur-3xl dark:bg-orange-500/[0.08]"
+        className="pointer-events-none absolute -right-24 top-24 h-72 w-72 rounded-full bg-accent/[0.06] blur-3xl dark:bg-accent/[0.09]"
       />
       <div
         aria-hidden
@@ -49,24 +49,24 @@ export function SiteFooter() {
       <div className="relative mx-auto max-w-7xl px-4 pb-12 pt-16 sm:px-5 lg:px-8 lg:pb-16 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
               Portfolio
             </p>
-            <h2 className="mt-4 max-w-md text-balance text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-[1.75rem] sm:leading-snug">
+            <h2 className="mt-4 max-w-md text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem] sm:leading-snug">
               {SITE.name}
-              <span className="mt-2 block text-base font-normal leading-snug text-zinc-600 dark:text-zinc-400">
+              <span className="mt-2 block text-base font-normal leading-snug text-muted-foreground">
                 Automation architecture, QA at scale, and pragmatic AI for real
                 production systems.
               </span>
             </h2>
-            <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
               {SITE.description}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {!onContact ? (
                 <Link
                   href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-xl border border-orange-700 bg-orange-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:border-orange-800 hover:bg-orange-800 dark:border-orange-600 dark:bg-orange-600 dark:hover:border-orange-500 dark:hover:bg-orange-500"
+                  className="group inline-flex items-center gap-2 rounded-xl border border-accent bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover"
                 >
                   Start a conversation
                   <ArrowUpRight
@@ -77,7 +77,7 @@ export function SiteFooter() {
               ) : null}
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 bg-white/80 px-5 py-3 text-sm font-semibold text-zinc-900 shadow-sm transition hover:border-zinc-400 hover:bg-white dark:border-zinc-600 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:border-zinc-500 dark:hover:bg-zinc-800/80"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-card-foreground shadow-sm transition hover:bg-muted"
               >
                 View selected work
               </Link>
@@ -86,7 +86,7 @@ export function SiteFooter() {
 
           <div className="grid gap-10 sm:grid-cols-2 lg:col-span-4 lg:gap-8">
             <div>
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Navigate
               </h3>
               <ul className="mt-4 space-y-2.5" role="list">
@@ -95,9 +95,8 @@ export function SiteFooter() {
                     <Link
                       href={link.href}
                       className={cn(
-                        "inline-flex text-sm font-medium text-zinc-700 transition hover:text-orange-700 dark:text-zinc-300 dark:hover:text-orange-400",
-                        pathname === link.href &&
-                          "text-orange-700 dark:text-orange-400",
+                        "inline-flex text-sm font-medium text-muted-foreground transition hover:text-accent",
+                        pathname === link.href && "text-accent",
                       )}
                     >
                       {link.label}
@@ -114,9 +113,8 @@ export function SiteFooter() {
                     <Link
                       href={link.href}
                       className={cn(
-                        "inline-flex text-sm font-medium text-zinc-700 transition hover:text-orange-700 dark:text-zinc-300 dark:hover:text-orange-400",
-                        pathname === link.href &&
-                          "text-orange-700 dark:text-orange-400",
+                        "inline-flex text-sm font-medium text-muted-foreground transition hover:text-accent",
+                        pathname === link.href && "text-accent",
                       )}
                     >
                       {link.label}
@@ -128,11 +126,11 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-col gap-8 lg:col-span-3">
-            <div className="rounded-2xl border border-zinc-200/90 bg-white/70 p-6 shadow-sm dark:border-white/[0.08] dark:bg-white/[0.03] dark:shadow-none">
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm dark:shadow-none">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Elsewhere
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Writing, open source, and professional presence.
               </p>
               <div className="mt-5">
@@ -140,31 +138,31 @@ export function SiteFooter() {
               </div>
             </div>
 
-            <figure className="rounded-2xl border border-zinc-200/90 bg-gradient-to-br from-white/90 to-zinc-50/90 p-6 dark:border-white/[0.08] dark:from-white/[0.04] dark:to-transparent">
-              <blockquote className="text-sm font-medium leading-relaxed text-zinc-800 dark:text-zinc-200">
+            <figure className="rounded-2xl border border-border bg-gradient-to-br from-card to-muted/60 p-6 dark:from-card dark:to-muted/30">
+              <blockquote className="text-sm font-medium leading-relaxed text-card-foreground">
                 &ldquo;Async-first, clear written specs, tight review
                 loops.&rdquo;
               </blockquote>
-              <figcaption className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
+              <figcaption className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 How I work
               </figcaption>
             </figure>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-6 border-t border-zinc-200/90 pt-8 dark:border-white/[0.07] sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-zinc-500 dark:text-zinc-500">
+        <div className="mt-14 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted-foreground">
             © {year} {SITE.name}. All rights reserved.
           </p>
           <nav
             aria-label="Footer"
-            className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-zinc-600 dark:text-zinc-400"
+            className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground"
           >
             {FOOTER_QUICK.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="transition hover:text-zinc-900 dark:hover:text-white"
+                className="transition hover:text-foreground"
               >
                 {link.label}
               </Link>

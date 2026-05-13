@@ -2,30 +2,72 @@
 
 @plugin "@tailwindcss/typography";
 
-/* Frontend-Masters–adjacent: charcoal surfaces, single accent, minimal noise */
+/*
+  Design tokens — Tailwind CSS v4 (`@theme inline`) + Oklch.
+  `:root` / `.dark` set semantic variables; `@theme` maps them to utilities (`bg-background`, `text-accent`, …).
+  Theme class on `<html>` via next-themes. Home hero uses `lg:gap-20` (= 5rem).
+*/
 
 :root {
   color-scheme: light dark;
-  --fm-bg: #fafaf9;
-  --fm-fg: #18181b;
-  --fm-muted: #71717a;
-  --fm-border: rgba(24, 24, 27, 0.12);
-  --fm-accent: #c2410c;
-  --fm-accent-hover: #9a3412;
+  --background: oklch(99.2% 0.003 286.32);
+  --foreground: oklch(21% 0.006 285.885);
+  --muted: oklch(96.4% 0.006 286.286);
+  --muted-foreground: oklch(48% 0.016 285.938);
+  --border: oklch(27% 0.006 286.033 / 0.13);
+  --card: oklch(100% 0 0 / 0.78);
+  --card-foreground: oklch(21% 0.006 285.885);
+  --card-border: oklch(27% 0.006 286.033 / 0.11);
+  /* Accent: perceptual orange (aligned with Tailwind orange-500 Oklch) */
+  --accent: oklch(70.5% 0.213 47.604);
+  --accent-hover: oklch(64% 0.2 47.604);
+  --accent-foreground: oklch(99% 0 0);
+
+  --fm-bg: var(--background);
+  --fm-fg: var(--foreground);
+  --fm-muted: var(--muted-foreground);
+  --fm-border: oklch(27% 0.006 286.033 / 0.13);
+  --fm-accent: var(--accent);
+  --fm-accent-hover: var(--accent-hover);
 }
 
 .dark {
-  --fm-bg: #0c0d10;
-  --fm-fg: #fafafa;
-  --fm-muted: #a1a1aa;
-  --fm-border: rgba(255, 255, 255, 0.08);
-  --fm-accent: #ea580c;
-  --fm-accent-hover: #f97316;
+  --background: oklch(14.1% 0.006 285.823);
+  --foreground: oklch(98.5% 0.004 286.32);
+  --muted: oklch(20.5% 0.014 286.067);
+  --muted-foreground: oklch(63% 0.016 286.067);
+  --border: oklch(100% 0 0 / 0.1);
+  --card: oklch(16.2% 0.009 285.885 / 0.82);
+  --card-foreground: oklch(92% 0.009 286);
+  --card-border: oklch(100% 0 0 / 0.12);
+  --accent: oklch(70.5% 0.213 47.604);
+  --accent-hover: oklch(76% 0.19 47.604);
+  /* High-contrast label on saturated orange */
+  --accent-foreground: oklch(99% 0 0);
+
+  --fm-bg: var(--background);
+  --fm-fg: var(--foreground);
+  --fm-muted: var(--muted-foreground);
+  --fm-border: oklch(100% 0 0 / 0.1);
+  --fm-accent: var(--accent);
+  --fm-accent-hover: var(--accent-hover);
 }
 
 @theme inline {
   --font-sans: var(--font-sans-variable);
   --font-mono: var(--font-mono-variable);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-border: var(--card-border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
 }
 
 @layer base {
@@ -36,6 +78,7 @@
   }
 
   body {
+    @apply bg-background text-foreground antialiased;
     font-family:
       var(--font-sans-variable),
       system-ui,
@@ -46,50 +89,70 @@
     letter-spacing: -0.016em;
     font-size: 1.0625rem;
     line-height: 1.6;
-    background-color: var(--fm-bg);
-    color: var(--fm-fg);
     background-image: radial-gradient(
       ellipse 120% 80% at 50% -30%,
-      rgba(194, 65, 12, 0.06),
+      color-mix(in oklch, var(--accent) 11%, transparent),
       transparent 55%
     );
     background-repeat: no-repeat;
     background-attachment: fixed;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   .dark body {
     background-image: radial-gradient(
-      ellipse 100% 60% at 50% -25%,
-      rgba(234, 88, 12, 0.09),
-      transparent 50%
+      ellipse 90% 55% at 50% -28%,
+      color-mix(in oklch, var(--accent) 9%, transparent),
+      transparent 52%
     );
   }
 
   ::selection {
-    background: rgba(194, 65, 12, 0.22);
-    color: var(--fm-fg);
-  }
-
-  .dark ::selection {
-    background: rgba(234, 88, 12, 0.25);
-    color: #fff;
+    background: color-mix(in oklch, var(--accent) 26%, transparent);
+    color: var(--foreground);
   }
 }
 
 @utility glass-panel {
-  @apply rounded-xl border border-zinc-200/90 bg-white/85 shadow-sm backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950/85;
+  @apply rounded-xl border border-border bg-card shadow-sm backdrop-blur-sm;
 }
 
 @utility text-gradient {
-  @apply text-zinc-900 dark:text-white;
+  @apply text-foreground;
 }
 
 @utility text-gradient-accent {
-  @apply text-orange-700 dark:text-orange-400;
+  @apply text-accent;
 }
 
 @utility fm-surface {
-  @apply rounded-xl border border-zinc-200/90 bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/40;
+  @apply rounded-xl border border-border bg-card;
+}
+
+/* Shared marketing panels — semantic tokens only */
+@utility marketing-shell {
+  @apply relative overflow-hidden rounded-[1.75rem] border border-border bg-gradient-to-b from-muted/90 via-background to-muted/60 p-8 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.04] sm:p-10 lg:p-12;
+}
+
+@utility marketing-glow-tr {
+  @apply pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-accent/18 blur-3xl dark:bg-accent/22;
+}
+
+@utility marketing-dash-callout {
+  @apply relative z-[1] rounded-2xl border border-dashed border-border bg-card/75 px-6 py-8 backdrop-blur-[2px] dark:bg-card/45 sm:px-8 sm:py-10;
+}
+
+@utility surface-code-inline {
+  @apply rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-[13px] text-foreground;
+}
+
+@utility page-rule {
+  @apply mx-auto mt-12 h-px max-w-xs bg-gradient-to-r from-transparent via-accent/40 to-transparent dark:via-accent/35 lg:mt-16;
+}
+
+@utility marketing-blur-bl {
+  @apply pointer-events-none absolute -bottom-32 left-1/4 h-48 w-48 rounded-full bg-accent/10 blur-3xl dark:bg-accent/15;
+}
+
+@utility marketing-blur-br {
+  @apply pointer-events-none absolute -bottom-28 right-1/3 h-44 w-44 rounded-full bg-accent/10 blur-3xl dark:bg-accent/14;
 }

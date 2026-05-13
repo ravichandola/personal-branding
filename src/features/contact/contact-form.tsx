@@ -21,10 +21,10 @@ export type ContactFormFields = {
 };
 
 const fieldSurface =
-  "border-zinc-300/90 bg-white text-zinc-900 shadow-sm placeholder:text-zinc-400 backdrop-blur-none transition-[border-color,box-shadow] focus-visible:border-orange-400/50 focus-visible:ring-orange-500/35 dark:border-zinc-700 dark:bg-zinc-950/85 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus-visible:border-orange-500/45 dark:focus-visible:ring-orange-400/30";
+  "!border-border !bg-background text-foreground shadow-sm placeholder:text-muted-foreground !backdrop-blur-none transition-[border-color,box-shadow] focus-visible:!border-accent/50 focus-visible:!ring-2 focus-visible:!ring-accent/35";
 
 const labelClass =
-  "mb-2 block text-[13px] font-semibold tracking-tight text-zinc-700 dark:text-zinc-300";
+  "mb-2 block text-[13px] font-semibold tracking-tight text-foreground";
 
 export function ContactForm() {
   const [status, setStatus] = React.useState<string | null>(null);
@@ -72,9 +72,9 @@ export function ContactForm() {
         type="text"
       />
 
-      <div className="flex flex-col gap-0 overflow-hidden rounded-2xl border border-zinc-200/90 bg-white/80 shadow-inner shadow-zinc-900/[0.03] dark:border-zinc-800 dark:bg-zinc-950/40 dark:shadow-none sm:flex-row">
+      <div className="flex flex-col gap-0 overflow-hidden rounded-2xl border border-border bg-card shadow-inner shadow-foreground/[0.03] sm:flex-row dark:shadow-none">
         <div
-          className="h-1 shrink-0 bg-gradient-to-r from-orange-500 via-orange-400/80 to-orange-600/60 sm:h-auto sm:w-1 sm:bg-gradient-to-b dark:from-orange-400 dark:via-orange-500/65 dark:to-orange-600/50"
+          className="h-1 shrink-0 bg-gradient-to-r from-accent via-accent/80 to-accent-hover sm:h-auto sm:w-1 sm:bg-gradient-to-b"
           aria-hidden
         />
         <div className="min-w-0 flex-1 space-y-8 p-6 sm:p-8 md:p-9">
@@ -111,7 +111,7 @@ export function ContactForm() {
             <div>
               <Label htmlFor="company" className={labelClass}>
                 Company{" "}
-                <span className="font-normal text-zinc-500 dark:text-zinc-500">
+                <span className="font-normal text-muted-foreground">
                   (optional)
                 </span>
               </Label>
@@ -125,7 +125,7 @@ export function ContactForm() {
             <div>
               <Label htmlFor="role" className={labelClass}>
                 Role{" "}
-                <span className="font-normal text-zinc-500 dark:text-zinc-500">
+                <span className="font-normal text-muted-foreground">
                   (optional)
                 </span>
               </Label>
@@ -154,7 +154,7 @@ export function ContactForm() {
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-4 border-t border-zinc-200/90 pt-6 dark:border-zinc-800/90 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
             <Button
               disabled={form.formState.isSubmitting}
               type="submit"
@@ -168,14 +168,14 @@ export function ContactForm() {
                 className={cn(
                   "text-sm font-medium leading-relaxed sm:text-right sm:max-w-md",
                   status.startsWith("Thanks")
-                    ? "text-orange-800 dark:text-orange-200"
+                    ? "text-foreground"
                     : "text-rose-700 dark:text-rose-300",
                 )}
               >
                 {status}
               </p>
             ) : (
-              <p className="text-sm leading-relaxed text-zinc-500 dark:text-zinc-500">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 Typical reply window: a few business days.
               </p>
             )}

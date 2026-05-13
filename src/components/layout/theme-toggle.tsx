@@ -38,7 +38,7 @@ export function ThemeToggle({
         variant="muted"
         className={cn(
           compact
-            ? "h-8 w-8 shrink-0 rounded-md border-zinc-200/90 bg-white p-0 text-zinc-500 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-900 dark:text-zinc-400"
+            ? "h-8 w-8 shrink-0 rounded-md border border-border bg-card p-0 text-muted-foreground shadow-sm"
             : "rounded-2xl",
         )}
         aria-label="Cycle appearance"
@@ -71,7 +71,7 @@ export function ThemeToggle({
       variant="muted"
       className={cn(
         compact &&
-          "h-8 w-8 shrink-0 rounded-md border-zinc-200/90 bg-white p-0 text-zinc-500 shadow-sm hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700/80 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-white",
+          "h-8 w-8 shrink-0 rounded-md border border-border bg-card p-0 text-muted-foreground shadow-sm hover:border-border hover:bg-muted hover:text-foreground dark:hover:bg-muted",
         !compact && presentation === "icon" && "rounded-2xl px-5",
         !compact && presentation === "full" && "rounded-xl px-6",
       )}

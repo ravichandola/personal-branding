@@ -29,11 +29,9 @@ export type SpotlightItem = {
 /** Served from `public/portrait.png` when CMS avatar URL is unset. */
 const DEFAULT_HOME_PORTRAIT = "/portrait.png";
 
-const sectionPanel =
-  "relative overflow-hidden rounded-[1.75rem] border border-zinc-200/90 bg-gradient-to-b from-zinc-50/95 via-white/92 to-zinc-100/80 p-8 shadow-sm ring-1 ring-black/[0.03] dark:border-zinc-800/90 dark:from-zinc-950/95 dark:via-zinc-950/75 dark:to-black/50 dark:ring-white/[0.04] sm:p-10 lg:p-12";
+const sectionPanel = "marketing-shell";
 
-const sectionGlow =
-  "pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-orange-400/18 blur-3xl dark:bg-orange-500/22";
+const sectionGlow = "marketing-glow-tr";
 
 /** Fallback when `HomeSpotlight` table is empty (matches seeded copy). */
 const STATIC_SPOTLIGHTS: SpotlightItem[] = [
@@ -102,7 +100,7 @@ export default async function MarketingHomePage() {
         <header className="scroll-mt-28">
           <HomeHero portraitUrl={portrait} heroTitles={heroTitles} />
           <div
-            className="mx-auto mt-12 h-px max-w-xs bg-gradient-to-r from-transparent via-orange-500/40 to-transparent dark:via-orange-400/35 lg:mt-16"
+            className="page-rule"
             aria-hidden
           />
         </header>
@@ -159,23 +157,23 @@ function Pillars() {
       <div className={sectionPanel}>
         <div className={sectionGlow} aria-hidden />
         <div
-          className="pointer-events-none absolute -bottom-32 left-1/4 h-48 w-48 rounded-full bg-orange-600/10 blur-3xl dark:bg-orange-600/15"
+          className="marketing-blur-bl"
           aria-hidden
         />
 
         <div className="relative z-[1] flex flex-wrap items-end justify-between gap-6 pb-9 sm:pb-10">
           <div className="max-w-2xl space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 sm:text-base">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent sm:text-base">
               How I work
             </p>
             <h2
               id="home-pillars-heading"
-              className="text-balance text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-3xl lg:text-[2rem] lg:leading-snug"
+              className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl lg:text-[2rem] lg:leading-snug"
             >
               Automation and AI that stay understandable when production gets
               loud.
             </h2>
-            <p className="text-pretty text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg sm:leading-[1.65]">
+            <p className="text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg sm:leading-[1.65]">
               From large-scale OCR and legal-tech programs to QA leadership
               and independent labs, the thread is the same: operability —
               explicit hand-offs between people and systems, quality you can
@@ -186,7 +184,7 @@ function Pillars() {
           <Button
             asChild
             variant="primary"
-            className="shadow-md shadow-orange-900/15 dark:shadow-orange-950/40"
+            className="shadow-md shadow-accent/15 dark:shadow-accent/25"
           >
             <Link href="/about" prefetch className="gap-1.5">
               About me
@@ -217,18 +215,18 @@ function PillarCard({
   icon: JSX.Element;
 }) {
   return (
-    <div className="group rounded-2xl border border-zinc-200/95 bg-white/90 p-6 shadow-sm transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-orange-600/35 hover:shadow-md hover:shadow-zinc-900/[0.04] dark:border-zinc-800 dark:bg-zinc-950/75 dark:hover:border-orange-500/40 dark:hover:shadow-black/25">
+    <div className="group rounded-2xl border border-border bg-card/90 p-6 shadow-sm transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-accent/35 hover:shadow-md hover:shadow-foreground/[0.04] dark:bg-card/80 dark:hover:shadow-black/25">
       <Badge tone="muted">
-        <span aria-hidden className="text-zinc-600 dark:text-zinc-400">
+        <span aria-hidden className="text-muted-foreground">
           {icon}
         </span>
         <span>{badge}</span>
       </Badge>
 
-      <h3 className="mt-6 text-lg font-semibold text-zinc-900 dark:text-white">
+      <h3 className="mt-6 text-lg font-semibold text-foreground">
         {title}
       </h3>
-      <p className="mt-3 text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+      <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
         {body}
       </p>
     </div>
@@ -237,7 +235,7 @@ function PillarCard({
 
 function ProjectSpotlight({ items }: { items: SpotlightItem[] }) {
   const cardClass =
-    "group flex h-full flex-col rounded-2xl border border-zinc-200/95 bg-white/90 shadow-sm outline-none transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-orange-600/45 hover:shadow-md hover:shadow-zinc-900/[0.04] focus-visible:ring-2 focus-visible:ring-orange-600/50 dark:border-zinc-800 dark:bg-zinc-950/75 dark:hover:border-orange-500/45 dark:hover:shadow-black/25";
+    "group flex h-full flex-col rounded-2xl border border-border bg-card/90 shadow-sm outline-none transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-md hover:shadow-foreground/[0.04] focus-visible:ring-2 focus-visible:ring-accent/50 dark:bg-card/80 dark:hover:shadow-black/25";
 
   return (
     <section
@@ -247,18 +245,18 @@ function ProjectSpotlight({ items }: { items: SpotlightItem[] }) {
       <div className={sectionPanel}>
         <div className={sectionGlow} aria-hidden />
         <div
-          className="pointer-events-none absolute -bottom-28 right-1/3 h-44 w-44 rounded-full bg-orange-600/10 blur-3xl dark:bg-orange-600/14"
+          className="marketing-blur-br"
           aria-hidden
         />
 
         <div className="relative z-[1] flex flex-wrap items-end justify-between gap-6 pb-9 sm:pb-10">
           <div className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 sm:text-base">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent sm:text-base">
               Selected work
             </p>
             <h2
               id="home-spotlight-heading"
-              className="max-w-2xl text-balance text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-3xl lg:text-[2rem] lg:leading-snug"
+              className="max-w-2xl text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl lg:text-[2rem] lg:leading-snug"
             >
               Case studies shaped for auditors, infra, and on-call operators.
             </h2>
@@ -275,20 +273,20 @@ function ProjectSpotlight({ items }: { items: SpotlightItem[] }) {
           {items.map((item, idx) => {
             const body = (
               <>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-700 dark:text-orange-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">
                   Featured {idx + 1}
                 </p>
-                <h3 className="mt-3 text-lg font-semibold text-zinc-900 group-hover:text-orange-800 dark:text-white dark:group-hover:text-orange-300 sm:text-xl">
+                <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-accent dark:group-hover:text-accent sm:text-xl">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-[15px] font-medium leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <p className="mt-3 text-[15px] font-medium leading-relaxed text-muted-foreground">
                   {item.summary}
                 </p>
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-zinc-600 line-clamp-5 dark:text-zinc-400">
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-5">
                   {item.narrative}
                 </p>
                 {item.projectSlug ? (
-                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-orange-700 dark:text-orange-400">
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-accent">
                     Read case study
                     <ArrowUpRight
                       className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -296,7 +294,7 @@ function ProjectSpotlight({ items }: { items: SpotlightItem[] }) {
                     />
                   </span>
                 ) : (
-                  <span className="mt-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">
+                  <span className="mt-5 text-xs font-medium text-muted-foreground">
                     Full write-up coming soon
                   </span>
                 )}

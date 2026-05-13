@@ -1,14 +1,16 @@
 import type { Prisma } from "@/generated/prisma";
+import {
+  type BlogTopicSlug,
+  BLOG_TOPIC_SLUGS,
+  blogPostMatchesTopicChip,
+  storedCategorySlugsMatchingTopic,
+} from "@/lib/blog-topic";
 
-export const BLOG_TOPIC_SLUGS = [
-  "gen-ai",
-  "java",
-  "javascript",
-  "git",
-  "other",
-] as const;
-
-export type BlogTopicSlug = (typeof BLOG_TOPIC_SLUGS)[number];
+export {
+  BLOG_TOPIC_LABELS,
+  BLOG_TOPIC_SLUGS,
+  type BlogTopicSlug,
+} from "@/lib/blog-topic";
 
 export const BLOGS_PAGE_SIZE = 18;
 
@@ -69,6 +71,7 @@ export function blogSearchTokens(q: string): string[] {
 
 /**
  * Build Prisma where clause: published, optional topic, optional multi-token search (AND).
+ * Topic matches canonical slugs and legacy seed slugs that map to the same chip.
  */
 export function blogListWhere(
   q: string,
@@ -77,7 +80,11 @@ export function blogListWhere(
   const where: Prisma.BlogPostWhereInput = { published: true };
 
   if (topic) {
-    where.categories = { some: { category: { slug: topic } } };
+    where.categories = {
+      some: {
+        category: { slug: { in: storedCategorySlugsMatchingTopic(topic) } },
+      },
+    };
   }
 
   const tokens = blogSearchTokens(q);
@@ -124,16 +131,16 @@ export function blogInstantSearchTokens(q: string): string[] {
     .slice(0, SEARCH_MAX_TOKENS);
 }
 
-/** Client-side match: topic (any category) + word AND across title/excerpt (substring, case-insensitive). */
+/**
+ * Client-side match: topic (DB category, legacy slug map, or inferred from copy)
+ * plus word AND across title/excerpt (substring, case-insensitive).
+ */
 export function blogPostMatchesFilters(
   post: BlogPostListRow,
   q: string,
   topic: BlogTopicSlug | null,
 ): boolean {
-  if (topic) {
-    const ok = post.categories.some((c) => c.category.slug === topic);
-    if (!ok) return false;
-  }
+  if (!blogPostMatchesTopicChip(post, topic)) return false;
   const tokens = blogInstantSearchTokens(q);
   if (tokens.length === 0) return true;
   const title = post.title.toLowerCase();

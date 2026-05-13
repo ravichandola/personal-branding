@@ -26,9 +26,9 @@ export const navLinks = [
 const navLinkClass = (active: boolean) =>
   cn(
     "relative block whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-2.5 sm:text-[15px]",
-    "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50",
+    "text-muted-foreground hover:text-foreground",
     active &&
-      "text-zinc-900 after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-orange-600 dark:text-white dark:after:bg-orange-500",
+      "text-foreground after:absolute after:inset-x-2 after:bottom-1 after:h-0.5 after:rounded-full after:bg-accent",
   );
 
 function isActive(pathname: string, href: string) {
@@ -44,19 +44,19 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
   React.useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <header className="sticky top-0 z-[80] w-full border-b border-zinc-200/85 bg-[#fafaf9]/92 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 dark:border-zinc-800/90 dark:bg-zinc-950/96 dark:supports-[backdrop-filter]:backdrop-saturate-150">
+    <header className="sticky top-0 z-[80] w-full border-b border-border bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150">
       <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3.5 sm:px-5 lg:flex-nowrap lg:gap-x-4 lg:px-8 lg:py-4 xl:gap-x-6">
         <Link
           href="/"
           className="relative z-10 flex min-w-0 max-w-[min(100%,22rem)] shrink-0 flex-col gap-0.5 leading-tight sm:max-w-none"
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400 sm:text-xs sm:tracking-[0.2em]">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground sm:text-[11px] sm:tracking-[0.22em]">
             Automation architecture · GenAI · Legal tech
           </span>
-          <span className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-lg lg:text-xl">
+          <span className="text-base font-semibold tracking-tight text-foreground sm:text-lg lg:text-xl">
             <span className="block sm:inline">Ravi Chandola</span>
             {brandSubtitle ? (
-              <span className="mt-0.5 block text-xs font-normal text-zinc-500 sm:ml-1.5 sm:mt-0 sm:inline sm:text-[15px] dark:text-zinc-400">
+              <span className="mt-0.5 block text-xs font-normal text-muted-foreground sm:ml-1.5 sm:mt-0 sm:inline sm:text-[15px]">
                 {brandSubtitle}
               </span>
             ) : null}
@@ -115,14 +115,14 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
           <Separator
             orientation="vertical"
             decorative
-            className="hidden h-8 bg-zinc-200 dark:bg-zinc-800 sm:block lg:hidden"
+            className="hidden h-8 bg-border sm:block lg:hidden"
           />
 
           <Button
             type="button"
             size="icon"
             variant="outline"
-            className="h-9 w-9 shrink-0 rounded-md border-zinc-300 bg-white lg:hidden dark:border-zinc-700 dark:bg-zinc-950"
+            className="h-9 w-9 shrink-0 rounded-md border border-border bg-background/90 lg:hidden"
             onClick={() => setOpen((previous) => !previous)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -139,10 +139,10 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="border-t border-zinc-200 bg-[#fafaf9]/98 dark:border-zinc-800 dark:bg-zinc-950/98 lg:hidden"
+            className="border-t border-border bg-background/98 lg:hidden backdrop-blur-sm"
           >
             <div className="mx-auto max-h-[min(70vh,520px)] max-w-7xl overflow-y-auto px-4 py-4 sm:px-5 lg:px-8">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600 dark:text-zinc-400 sm:text-[13px]">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground sm:text-[13px]">
                 Navigate
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -151,16 +151,16 @@ export function SiteNavbar({ brandSubtitle }: { brandSubtitle?: string }) {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "rounded-lg border border-zinc-200/90 bg-white px-3 py-3 text-[15px] font-medium text-zinc-800 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-200 dark:hover:border-zinc-700 dark:hover:bg-zinc-900",
+                      "rounded-lg border border-border bg-card px-3 py-3 text-[15px] font-medium text-card-foreground transition-colors hover:bg-muted hover:border-card-border",
                       isActive(pathname, link.href) &&
-                        "border-orange-600/45 bg-orange-50 dark:border-orange-500/35 dark:bg-orange-950/35",
+                        "border-accent/50 bg-accent/10",
                     )}
                   >
                     {link.label}
                   </Link>
                 ))}
               </div>
-              <Separator className="my-4 bg-zinc-200 dark:bg-zinc-800" />
+              <Separator className="my-4 bg-border" />
               <SocialIcons align="center" surface="header" />
             </div>
           </motion.div>

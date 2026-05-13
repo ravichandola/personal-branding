@@ -15,6 +15,7 @@ import Parser from "rss-parser";
 import TurndownService from "turndown";
 
 import { PrismaClient } from "../src/generated/prisma";
+import { assignInferredBlogTopic } from "../src/lib/sync-blog-category";
 
 const prisma = new PrismaClient();
 
@@ -117,7 +118,7 @@ async function main() {
 
     const existing = await prisma.blogPost.findUnique({ where: { slug } });
 
-    await prisma.blogPost.upsert({
+    const row = await prisma.blogPost.upsert({
       where: { slug },
       create: {
         slug,
@@ -144,6 +145,13 @@ async function main() {
         seoDescription: excerpt.slice(0, 300),
       },
     });
+
+    await assignInferredBlogTopic(
+      row.id,
+      title,
+      excerpt,
+      stripTags(encoded || excerpt).slice(0, 6000),
+    );
 
     if (existing) updated += 1;
     else created += 1;
