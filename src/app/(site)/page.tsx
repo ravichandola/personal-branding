@@ -27,6 +27,9 @@ export type SpotlightItem = {
   projectSlug: string | null;
 };
 
+/** Served from `public/portrait.png` when CMS avatar URL is unset. */
+const DEFAULT_HOME_PORTRAIT = "/portrait.png";
+
 const STATIC_STATS = [
   { label: "Years Leading Automation", value: "7+" },
   { label: "Artifacts Shipped", value: "45+" },
@@ -64,7 +67,7 @@ const STATIC_SPOTLIGHTS: SpotlightItem[] = [
 ];
 
 export default async function MarketingHomePage() {
-  let portrait: string | undefined;
+  let portrait: string | undefined = DEFAULT_HOME_PORTRAIT;
   let heroTitles: string[] | undefined;
   let stats = STATIC_STATS;
   let spotlight: SpotlightItem[] = STATIC_SPOTLIGHTS;
@@ -79,7 +82,8 @@ export default async function MarketingHomePage() {
       }),
     ]);
 
-    portrait = profile?.avatarUrl ?? undefined;
+    const avatarFromDb = profile?.avatarUrl?.trim();
+    if (avatarFromDb) portrait = avatarFromDb;
     if (profile?.rotatingTitles?.length) {
       heroTitles = profile.rotatingTitles;
     }

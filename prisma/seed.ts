@@ -80,7 +80,7 @@ Since 2020 I've written on Medium about Git, Java, JavaScript, React, APIs, Dock
       seoDescription:
         "Litera automation lead — Sage (Cursor autocode, Jira-grounded tests, regression maintenance), contributing to architecture & GenAI, Playwright/TypeScript, legal tech PDF/OCR.",
       resumeUrl: "",
-      avatarUrl: "",
+      avatarUrl: "/portrait.png",
       statsYears: 8,
       statsProjects: 45,
       statsArticles: 25,
