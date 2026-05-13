@@ -43,6 +43,13 @@ jobs:
 
       - run: npm run test
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-junit
+          path: test-results/vitest-junit.xml
+          if-no-files-found: ignore
+
       - run: npx prisma migrate deploy
 
       - run: npm run build
@@ -50,6 +57,13 @@ jobs:
       - run: npx playwright install --with-deps chromium
 
       - run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-junit
+          path: test-results/playwright-junit.xml
+          if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v4
         if: failure()
