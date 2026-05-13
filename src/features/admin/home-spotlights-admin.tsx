@@ -146,7 +146,7 @@ export function HomeSpotlightsAdminPanel({
             <Input
               id="projectSlug"
               name="projectSlug"
-              placeholder="playwright-fleet-fabric"
+              placeholder="sage"
               defaultValue={editing?.projectSlug ?? ""}
               className="border-white/15 bg-black/50"
             />

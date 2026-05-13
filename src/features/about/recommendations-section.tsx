@@ -5,6 +5,7 @@ import { SITE } from "@/config/site";
 import type { Testimonial } from "@/generated/prisma";
 
 import { Card, CardInner } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 function formatWrittenAt(date: Date | null) {
   if (!date) return null;
@@ -15,7 +16,13 @@ function formatWrittenAt(date: Date | null) {
   }).format(date);
 }
 
-export function RecommendationsSection({ items }: { items: Testimonial[] }) {
+export function RecommendationsSection({
+  items,
+  className,
+}: {
+  items: Testimonial[];
+  className?: string;
+}) {
   if (!items.length) {
     return null;
   }
@@ -23,7 +30,7 @@ export function RecommendationsSection({ items }: { items: Testimonial[] }) {
   return (
     <section
       aria-labelledby="recommendations-heading"
-      className="space-y-8 sm:space-y-10"
+      className={cn("space-y-8 sm:space-y-10", className)}
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-3">
@@ -56,41 +63,41 @@ export function RecommendationsSection({ items }: { items: Testimonial[] }) {
         {items.map((item) => {
           const writtenLabel = formatWrittenAt(item.writtenAt);
           return (
-          <Card
-            key={item.id}
-            className="border-zinc-200/95 bg-white/90 dark:border-zinc-800 dark:bg-zinc-950/80"
-          >
-            <CardInner className="space-y-4 sm:space-y-5 sm:p-8 md:p-9">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 space-y-1.5">
-                  <p className="text-lg font-semibold leading-snug text-zinc-900 dark:text-white sm:text-xl">
-                    {item.author}
-                  </p>
-                  {item.role ? (
-                    <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-[15px]">
-                      {item.role}
+            <Card
+              key={item.id}
+              className="border-zinc-200/95 bg-white/90 dark:border-zinc-800 dark:bg-zinc-950/80"
+            >
+              <CardInner className="space-y-4 sm:space-y-5 sm:p-8 md:p-9">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1.5">
+                    <p className="text-lg font-semibold leading-snug text-zinc-900 dark:text-white sm:text-xl">
+                      {item.author}
                     </p>
+                    {item.role ? (
+                      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-[15px]">
+                        {item.role}
+                      </p>
+                    ) : null}
+                  </div>
+                  <Quote
+                    className="h-5 w-5 shrink-0 text-orange-600/80 dark:text-orange-400/90"
+                    strokeWidth={1.6}
+                    aria-hidden
+                  />
+                </div>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500 dark:text-zinc-500 sm:text-[13px]">
+                  {writtenLabel ? <span>{writtenLabel}</span> : null}
+                  {item.relationship ? (
+                    <span className="text-zinc-500 dark:text-zinc-500">
+                      {item.relationship}
+                    </span>
                   ) : null}
                 </div>
-                <Quote
-                  className="h-5 w-5 shrink-0 text-orange-600/80 dark:text-orange-400/90"
-                  strokeWidth={1.6}
-                  aria-hidden
-                />
-              </div>
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500 dark:text-zinc-500 sm:text-[13px]">
-                {writtenLabel ? <span>{writtenLabel}</span> : null}
-                {item.relationship ? (
-                  <span className="text-zinc-500 dark:text-zinc-500">
-                    {item.relationship}
-                  </span>
-                ) : null}
-              </div>
-              <blockquote className="border-l-2 border-orange-500/50 pl-4 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 sm:text-[17px] sm:leading-[1.65]">
-                <p className="whitespace-pre-line">{item.quote}</p>
-              </blockquote>
-            </CardInner>
-          </Card>
+                <blockquote className="border-l-2 border-orange-500/50 pl-4 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 sm:text-[17px] sm:leading-[1.65]">
+                  <p className="whitespace-pre-line">{item.quote}</p>
+                </blockquote>
+              </CardInner>
+            </Card>
           );
         })}
       </div>

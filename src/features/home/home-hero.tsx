@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Cpu,
-  FileDown,
   NotebookPen,
   Orbit,
   Radar,
@@ -19,7 +18,6 @@ import {
 
 import type { JSX } from "react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SocialIcons } from "@/components/layout/social-icons";
 import { Separator } from "@/components/ui/separator";
@@ -74,11 +72,34 @@ export function HomeHero({
 
   return (
     <section className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-14 xl:gap-20">
-      <div className="max-w-2xl space-y-7">
-        <Badge tone="accent">
-          <Cpu aria-hidden className="h-3.5 w-3.5" />
-          Portfolio
-        </Badge>
+      <div className="max-w-2xl space-y-7 lg:pt-1">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="relative flex items-center gap-4 sm:gap-5"
+        >
+          <div className="pointer-events-none absolute -left-6 top-1/2 h-28 w-28 -translate-y-1/2 rounded-full bg-orange-500/[0.12] blur-3xl dark:bg-orange-400/[0.14]" aria-hidden />
+          <div className="relative flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-2xl border border-orange-500/25 bg-gradient-to-br from-orange-500/[0.14] via-white/60 to-transparent shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:border-orange-400/30 dark:from-orange-400/[0.12] dark:via-zinc-900/80 dark:to-transparent dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <Cpu
+              aria-hidden
+              className="h-[1.35rem] w-[1.35rem] text-orange-700 dark:text-orange-400"
+              strokeWidth={1.75}
+            />
+            <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400/45 dark:bg-orange-300/35" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-orange-600 shadow-sm ring-2 ring-white dark:bg-orange-500 dark:ring-zinc-950" />
+            </span>
+          </div>
+          <div className="min-w-0 space-y-1">
+            <p className="text-[13px] font-semibold leading-snug tracking-tight text-zinc-900 dark:text-white sm:text-sm">
+              Automation &amp; AI — built for production reality
+            </p>
+            <p className="text-[12px] leading-relaxed text-zinc-500 dark:text-zinc-500 sm:text-[13px]">
+              Litera · Remote-first · Sage, fleets &amp; guarded agents
+            </p>
+          </div>
+        </motion.div>
 
         <div className="space-y-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500">
@@ -133,17 +154,6 @@ export function HomeHero({
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500 dark:text-zinc-500">
             <Link
               prefetch
-              href="/resume"
-              className="inline-flex items-center gap-1.5 font-medium text-zinc-700 underline decoration-zinc-300 decoration-1 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600/50 dark:text-zinc-300 dark:decoration-zinc-600 dark:hover:text-orange-400 dark:hover:decoration-orange-500/45"
-            >
-              <FileDown className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
-              Résumé
-            </Link>
-            <span className="text-zinc-300 dark:text-zinc-600" aria-hidden>
-              ·
-            </span>
-            <Link
-              prefetch
               href="/contact"
               className="inline-flex items-center gap-1.5 font-medium text-zinc-700 underline decoration-zinc-300 decoration-1 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600/50 dark:text-zinc-300 dark:decoration-zinc-600 dark:hover:text-orange-400 dark:hover:decoration-orange-500/45"
             >
@@ -158,7 +168,8 @@ export function HomeHero({
       </div>
 
       <div className="w-full max-w-md lg:max-w-[400px] lg:shrink-0 xl:max-w-[420px]">
-        <div className="overflow-hidden rounded-2xl border border-zinc-200/90 bg-white/60 shadow-lg shadow-zinc-900/[0.04] ring-1 ring-zinc-900/[0.03] dark:border-zinc-800 dark:bg-zinc-900/40 dark:shadow-black/30 dark:ring-white/[0.06]">
+        <div className="rounded-2xl bg-gradient-to-br from-orange-500/35 via-zinc-200/50 to-transparent p-[1px] shadow-lg shadow-zinc-900/[0.06] dark:from-orange-500/25 dark:via-zinc-700/35 dark:to-transparent dark:shadow-black/40">
+          <div className="overflow-hidden rounded-[calc(1rem-1px)] border border-zinc-200/90 bg-white/70 shadow-inner shadow-white/40 ring-1 ring-zinc-900/[0.02] dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none dark:ring-white/[0.04]">
           <div className="relative aspect-[4/5] bg-zinc-200 dark:bg-zinc-900">
             {portraitUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -196,6 +207,7 @@ export function HomeHero({
                 </span>
               ))}
             </div>
+          </div>
           </div>
         </div>
 

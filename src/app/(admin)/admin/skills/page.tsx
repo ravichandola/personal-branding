@@ -22,10 +22,13 @@ export default async function AdminSkillsPage() {
         <h1 className="text-3xl font-semibold text-white">Skills CMS</h1>
         <p className="mt-2 max-w-2xl text-sm text-slate-400">
           These records power the public{" "}
-          <a className="text-sky-300 underline-offset-4 hover:underline" href="/skills">
-            /skills
+          <a
+            className="text-sky-300 underline-offset-4 hover:underline"
+            href="/about#about-skills"
+          >
+            Skills &amp; depth
           </a>{" "}
-          page. Seed creates defaults; edit or extend from here.
+          section on About. Seed creates defaults; edit or extend from here.
         </p>
       </header>
 

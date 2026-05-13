@@ -96,7 +96,7 @@ export async function createSkillAction(
         sortOrder: sortOrder.value ?? 0,
       },
     });
-    revalidatePath("/skills");
+    revalidatePath("/about");
     revalidatePath("/admin/skills");
     return { ok: true, message: "Skill created." };
   } catch (e) {
@@ -148,7 +148,7 @@ export async function updateSkillAction(
         sortOrder: sortOrder.value ?? 0,
       },
     });
-    revalidatePath("/skills");
+    revalidatePath("/about");
     revalidatePath("/admin/skills");
     return { ok: true, message: "Skill updated." };
   } catch (e) {
@@ -169,7 +169,7 @@ export async function deleteSkillAction(
 
   try {
     await prisma.skill.delete({ where: { id } });
-    revalidatePath("/skills");
+    revalidatePath("/about");
     revalidatePath("/admin/skills");
     return { ok: true, message: "Skill deleted." };
   } catch (e) {
