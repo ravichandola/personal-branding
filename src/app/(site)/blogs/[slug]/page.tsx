@@ -1,9 +1,23 @@
 import { notFound } from "next/navigation";
 
-import { prisma } from "@/lib/prisma";
 import { MdxArticle } from "@/features/blog/mdx-content";
 import { MediumPostLayout } from "@/features/blog/medium-post-layout";
 import { isMediumArticleUrl } from "@/lib/external-content";
+import { prisma } from "@/lib/prisma";
+
+/** Pre-render published posts at build; new slugs still work (`dynamicParams`). */
+export async function generateStaticParams() {
+  const slugs = await prisma.blogPost.findMany({
+    where: { published: true },
+    select: { slug: true },
+  });
+  return slugs.map(({ slug }) => ({ slug }));
+}
+
+export const dynamicParams = true;
+
+/** Fallback ISR if content changes without an admin `revalidatePath` (e.g. sync script). */
+export const revalidate = 3600;
 
 export default async function BlogDetailPage(props: {
   params: Promise<{ slug: string }>;
@@ -54,5 +68,3 @@ export default async function BlogDetailPage(props: {
     </article>
   );
 }
-
-export const dynamic = "force-dynamic";

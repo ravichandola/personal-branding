@@ -15,8 +15,8 @@ export const BLOGS_PAGE_SIZE = 18;
 /** Max length for raw search input; extra trimmed. */
 const SEARCH_MAX = 160;
 /** Minimum characters before search applies (avoids huge result sets for "a"). */
-const SEARCH_MIN = 2;
-/** Max words (tokens) processed from the query. */
+export const BLOG_SEARCH_MIN_CHARS = 2;
+/** Max words (tokens) for instant search on /blogs. */
 const SEARCH_MAX_TOKENS = 6;
 
 export type ParsedBlogsListParams = {
@@ -50,9 +50,21 @@ export function parseBlogsListParams(raw: {
     : 1;
 
   const searchIgnoredTooShort =
-    q.length > 0 && q.length < SEARCH_MIN;
+    q.length > 0 && q.length < BLOG_SEARCH_MIN_CHARS;
 
   return { q, topic, page, searchIgnoredTooShort };
+}
+
+/**
+ * Tokens used for full-text search (AND). Empty if query too short or only noise.
+ */
+export function blogSearchTokens(q: string): string[] {
+  if (q.length < BLOG_SEARCH_MIN_CHARS) return [];
+  return q
+    .split(/\s+/u)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= BLOG_SEARCH_MIN_CHARS)
+    .slice(0, SEARCH_MAX_TOKENS);
 }
 
 /**
@@ -68,27 +80,19 @@ export function blogListWhere(
     where.categories = { some: { category: { slug: topic } } };
   }
 
-  if (q.length >= SEARCH_MIN) {
-    const tokens = q
-      .split(/\s+/u)
-      .map((t) => t.trim())
-      .filter((t) => t.length >= SEARCH_MIN)
-      .slice(0, SEARCH_MAX_TOKENS);
-
-    if (tokens.length > 0) {
-      where.AND = tokens.map((token) => ({
-        OR: [
-          { title: { contains: token, mode: "insensitive" as const } },
-          { excerpt: { contains: token, mode: "insensitive" as const } },
-        ],
-      }));
-    }
+  const tokens = blogSearchTokens(q);
+  if (tokens.length > 0) {
+    where.AND = tokens.map((token) => ({
+      OR: [
+        { title: { contains: token, mode: "insensitive" as const } },
+        { excerpt: { contains: token, mode: "insensitive" as const } },
+      ],
+    }));
   }
 
   return where;
 }
 
-/** Fields loaded for /blogs cards only — never `content`. */
 export const blogPostListSelect = {
   id: true,
   slug: true,
@@ -99,7 +103,6 @@ export const blogPostListSelect = {
   readingTimeMinutes: true,
   canonicalUrl: true,
   categories: {
-    take: 1,
     select: {
       category: { select: { slug: true, name: true } },
     },
@@ -109,3 +112,34 @@ export const blogPostListSelect = {
 export type BlogPostListRow = Prisma.BlogPostGetPayload<{
   select: typeof blogPostListSelect;
 }>;
+
+/** Tokens for live client filter (any length ≥1; space-separated AND). */
+export function blogInstantSearchTokens(q: string): string[] {
+  const t = q.trim();
+  if (!t) return [];
+  return t
+    .split(/\s+/u)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+    .slice(0, SEARCH_MAX_TOKENS);
+}
+
+/** Client-side match: topic (any category) + word AND across title/excerpt (substring, case-insensitive). */
+export function blogPostMatchesFilters(
+  post: BlogPostListRow,
+  q: string,
+  topic: BlogTopicSlug | null,
+): boolean {
+  if (topic) {
+    const ok = post.categories.some((c) => c.category.slug === topic);
+    if (!ok) return false;
+  }
+  const tokens = blogInstantSearchTokens(q);
+  if (tokens.length === 0) return true;
+  const title = post.title.toLowerCase();
+  const excerpt = post.excerpt.toLowerCase();
+  return tokens.every(
+    (tok) =>
+      title.includes(tok.toLowerCase()) || excerpt.includes(tok.toLowerCase()),
+  );
+}
