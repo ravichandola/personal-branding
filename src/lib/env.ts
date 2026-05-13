@@ -35,7 +35,9 @@ if (!parsed.success) {
   console.warn("Environment validation warnings:", parsed.error.flatten());
 }
 
-const values = parsed.success ? parsed.data : (process.env as z.infer<typeof serverSchema>);
+const values = parsed.success
+  ? parsed.data
+  : (process.env as z.infer<typeof serverSchema>);
 
 export type ServerEnv = z.infer<typeof serverSchema>;
 

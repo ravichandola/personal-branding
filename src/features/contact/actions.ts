@@ -4,31 +4,31 @@ import crypto from "node:crypto";
 
 import { headers } from "next/headers";
 import { Resend } from "resend";
-import { z } from "zod";
 
+import { contactPayloadSchema } from "@/features/contact/contact-schema";
 import { prisma } from "@/lib/prisma";
 
-const payload = z.object({
-  name: z.string().trim().min(2).max(120),
-  email: z.string().email(),
-  company: z.string().trim().max(120).optional(),
-  role: z.string().trim().max(120).optional(),
-  message: z.string().trim().min(20).max(4000),
-  website: z.string().max(0).default(""),
-});
-
-export type ContactPayload = z.infer<typeof payload>;
+export type ContactSubmitResult =
+  | {
+      ok: true;
+      /** True when Resend accepted the notification email */
+      emailSent: boolean;
+      /** Hint for admins when email was skipped or failed */
+      emailHint?: string;
+    }
+  | { ok: false; error: string };
 
 export async function submitContactAction(
   input: unknown,
-): Promise<
-  { ok: true } | { ok: false; error: string }
-> {
+): Promise<ContactSubmitResult> {
   try {
-    const parsed = payload.safeParse(input);
+    const parsed = contactPayloadSchema.safeParse(input);
 
     if (!parsed.success) {
-      return { ok: false, error: "Please double-check the highlighted fields." };
+      return {
+        ok: false,
+        error: "Please double-check the highlighted fields.",
+      };
     }
 
     const { website: _trap, ...data } = parsed.data;
@@ -66,24 +66,75 @@ export async function submitContactAction(
       },
     });
 
-    const key = process.env.RESEND_API_KEY;
-    const notify =
-      process.env.CONTACT_NOTIFY_EMAIL ?? process.env.CONTACT_ALERT_EMAIL;
-    const from =
-      process.env.RESEND_FROM_EMAIL ??
-      "Portfolio <notifications@example.com>";
-
-    if (key && notify) {
-      const resend = new Resend(key);
-      await resend.emails.send({
-        from,
-        to: notify,
-        subject: `Inbound note from ${data.name}`,
-        text: `${data.message}\n\n— ${data.name} <${data.email}>\nCompany: ${data.company ?? "n/a"}\nRole: ${data.role ?? "n/a"}`,
+    let notify = "";
+    try {
+      const settings = await prisma.settings.findUnique({
+        where: { id: "default" },
+        select: { contactNotifyEmail: true },
       });
+      notify = settings?.contactNotifyEmail?.trim() ?? "";
+    } catch {
+      /* optional DB */
+    }
+    if (!notify) {
+      notify =
+        process.env.CONTACT_NOTIFY_EMAIL?.trim() ??
+        process.env.CONTACT_ALERT_EMAIL?.trim() ??
+        "";
     }
 
-    return { ok: true };
+    const key = process.env.RESEND_API_KEY?.trim() ?? "";
+
+    const from =
+      process.env.RESEND_FROM_EMAIL?.trim() ??
+      "Portfolio <onboarding@resend.dev>";
+
+    if (!key) {
+      console.warn(
+        "[contact] RESEND_API_KEY is missing — DB save succeeded, mail skipped.",
+      );
+      return {
+        ok: true,
+        emailSent: false,
+        emailHint:
+          "Automated inbox copy is paused on this deployment. Your message is still recorded and I will reply using the address you entered.",
+      };
+    }
+
+    if (!notify) {
+      console.warn(
+        "[contact] No CONTACT_NOTIFY_EMAIL / Admin notify address — DB save succeeded, mail skipped.",
+      );
+      return {
+        ok: true,
+        emailSent: false,
+        emailHint:
+          "Automated inbox copy is not routed yet. Your message is still recorded and I will follow up directly.",
+      };
+    }
+
+    const resend = new Resend(key);
+    const { error } = await resend.emails.send({
+      from,
+      to: notify,
+      replyTo: data.email,
+      subject: `Inbound note from ${data.name}`,
+      text: `${data.message}\n\n— ${data.name} <${data.email}>\nCompany: ${data.company ?? "n/a"}\nRole: ${data.role ?? "n/a"}`,
+    });
+
+    if (error) {
+      console.error("[contact] Resend API error:", error.name, error.message);
+      const isDev = process.env.NODE_ENV === "development";
+      return {
+        ok: true,
+        emailSent: false,
+        emailHint: isDev
+          ? `Delivery test failed (${error.name}: ${error.message}). Your submission is still saved—check Resend domain / from-address in dev.`
+          : "Your message was saved, but the confirmation email could not be delivered. I will still reach you at the address you provided.",
+      };
+    }
+
+    return { ok: true, emailSent: true };
   } catch (error) {
     console.error("[contact]", error);
     return {
