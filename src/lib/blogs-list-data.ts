@@ -9,7 +9,8 @@ import {
 /** Invalidate via `revalidateTag(BLOGS_LIST_CACHE_TAG)` when posts change. */
 export const BLOGS_LIST_CACHE_TAG = "blogs-list";
 
-function normalizeBlogListRows(posts: BlogPostListRow[]): BlogPostListRow[] {
+/** Normalizes `publishedAt` when cached rows deserialize as ISO strings. */
+export function normalizeBlogListRows(posts: BlogPostListRow[]): BlogPostListRow[] {
   return posts.map((p) => ({
     ...p,
     publishedAt:

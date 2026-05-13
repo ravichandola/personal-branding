@@ -2,13 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
+import { isProtectedAdminRoute } from "@/lib/admin-path";
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isAdminGate =
-    pathname.startsWith("/admin") && !pathname.startsWith("/admin/login");
-
-  if (!isAdminGate) {
+  if (!isProtectedAdminRoute(pathname)) {
     return NextResponse.next();
   }
 
